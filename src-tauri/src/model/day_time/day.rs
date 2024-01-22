@@ -47,7 +47,7 @@ impl DaysOfMonth
 mod tests
 {
     use super::*;
-    use crate::model::day::{DaysOfWeek, Day};
+    use crate::model::day_time::{DaysOfWeek, Day};
 
     use serde_json::json;
 

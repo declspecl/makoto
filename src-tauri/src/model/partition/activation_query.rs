@@ -1,4 +1,4 @@
-use crate::model::{day::{DaysOfWeek, DaysOfMonth}, time::TimeRange};
+use crate::model::day_time::{DaysOfWeek, DaysOfMonth, TimeRange};
 
 use serde::{Serialize, Deserialize};
 
@@ -6,9 +6,9 @@ use serde::{Serialize, Deserialize};
 #[serde(tag = "tag")]
 pub enum ActivationQuery
 {
+    InTimeRange(TimeRange),
     OnDaysOfWeek(DaysOfWeek),
     OnDaysOfMonth(DaysOfMonth),
-    InTimeRange(TimeRange)
 }
 
 // ----------------------------
@@ -18,7 +18,7 @@ pub enum ActivationQuery
 mod tests
 {
     use super::*;
-    use crate::model::{day::Day, time::Time};
+    use crate::model::day_time::{Day, Time};
 
     use serde_json::json;
 
@@ -43,19 +43,6 @@ mod tests
         );
 
         assert_eq!(
-            json!(ActivationQuery::OnDaysOfMonth(DaysOfMonth::new(vec![1, 31]))).to_string(),
-            r#"
-            {
-                "days": [
-                    1,
-                    31
-                ],
-                "tag": "OnDaysOfMonth"
-            }
-            "#.replace(" ", "").replace("\n", "")
-        );
-
-        assert_eq!(
             json!(ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![Day::Monday, Day::Tuesday]))).to_string(),
             r#"
             {
@@ -64,6 +51,19 @@ mod tests
                     "Tuesday"
                 ],
                 "tag": "OnDaysOfWeek"
+            }
+            "#.replace(" ", "").replace("\n", "")
+        );
+
+        assert_eq!(
+            json!(ActivationQuery::OnDaysOfMonth(DaysOfMonth::new(vec![1, 31]))).to_string(),
+            r#"
+            {
+                "days": [
+                    1,
+                    31
+                ],
+                "tag": "OnDaysOfMonth"
             }
             "#.replace(" ", "").replace("\n", "")
         );

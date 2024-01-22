@@ -23,7 +23,7 @@ impl ActivationModifier
 #[cfg(test)]
 mod tests
 {
-    use crate::model::day::{DaysOfWeek, Day};
+    use crate::model::day_time::{DaysOfWeek, Day};
 
     use super::*;
 
