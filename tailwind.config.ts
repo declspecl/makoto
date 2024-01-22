@@ -1,11 +1,21 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+    // darkMode: "class",
     content: [
         "./index.html",
         "./src/**/*.{ts,tsx}"
     ],
     theme: {
+        borderRadius: {
+            "base-lg": "var(--base-radius)",
+            "base-md": "calc(var(--base-radius) - 2px)",
+            "base-sm": "calc(var(--base-radius) - 4px)",
+
+            "container-lg": "var(--container-radius)",
+            "container-md": "calc(var(--container-radius) - 2px)",
+            "container-sm": "calc(var(--container-radius) - 4px)"
+        },
         colors: {
             background: {
                 DEFAULT: "hsl(var(--background))",
@@ -25,31 +35,31 @@ const config: Config = {
             },
             card: {
                 DEFAULT: "hsl(var(--card))",
-                foreground: "hsl(var(--card-foreground))",
+                foreground: "hsl(var(--card-foreground))"
             },
             primary: {
                 DEFAULT: "hsl(var(--primary))",
-                foreground: "hsl(var(--primary-foreground))",
+                foreground: "hsl(var(--primary-foreground))"
             },
             secondary: {
                 DEFAULT: "hsl(var(--secondary))",
-                foreground: "hsl(var(--secondary-foreground))",
+                foreground: "hsl(var(--secondary-foreground))"
             },
             accent: {
                 DEFAULT: "hsl(var(--accent))",
-                foreground: "hsl(var(--accent-foreground))",
+                foreground: "hsl(var(--accent-foreground))"
             },
             success: {
                 DEFAULT: "hsl(var(--success))",
-                foreground: "hsl(var(--success-foreground))",
+                foreground: "hsl(var(--success-foreground))"
             },
             warning: {
                 DEFAULT: "hsl(var(--warning))",
-                foreground: "hsl(var(--warning-foreground))",
+                foreground: "hsl(var(--warning-foreground))"
             },
             destructive: {
                 DEFAULT: "hsl(var(--destructive))",
-                foreground: "hsl(var(--destructive-foreground))",
+                foreground: "hsl(var(--destructive-foreground))"
             },
             border: "hsl(var(--border))",
             ring: "hsl(var(--ring))",
@@ -57,18 +67,6 @@ const config: Config = {
             transparent: "transparent"
         },
         extend: {
-            borderWidth: {
-                theme: "var(--border-width)"
-            },
-            borderRadius: {
-                "base": "var(--base-radius)",
-                "base-sm": "calc(var(--base-radius) - 2px)",
-                "base-xs": "calc(var(--base-radius) - 4px)",
-
-                "container": "var(--container-radius)",
-                "container-sm": "calc(var(--container-radius) - 2px)",
-                "container-xs": "calc(var(--container-radius) - 4px)"
-            },
             keyframes: {
                 "accordion-down": {
                     from: { height: "0" },
@@ -87,3 +85,5 @@ const config: Config = {
     },
     plugins: [require("tailwindcss-animate")]
 };
+
+export default config;
