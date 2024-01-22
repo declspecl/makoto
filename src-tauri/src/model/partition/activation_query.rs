@@ -1,12 +1,71 @@
-use crate::model::{Day, Time};
+use crate::model::{day::{DaysOfWeek, DaysOfMonth}, time::TimeRange};
 
-#[derive(Debug)]
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "tag")]
 pub enum ActivationQuery
 {
-    OnDaysOfWeek(Vec<Day>),
-    OnDaysOfMonth(Vec<u8>),
-    InTimeRange((Time, Time))
+    OnDaysOfWeek(DaysOfWeek),
+    OnDaysOfMonth(DaysOfMonth),
+    InTimeRange(TimeRange)
 }
 
-// TODO: impl Serialize for ActivationQuery
-// TODO: impl Deserialize for ActivationQuery
+// ----------------------------
+// - serialization unit tests -
+// ----------------------------
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::model::{day::Day, time::Time};
+
+    use serde_json::json;
+
+    #[test]
+    fn test_activation_query_serialization()
+    {
+        assert_eq!(
+            json!(ActivationQuery::InTimeRange(TimeRange::new(Time::new(0, 0), Time::new(23, 59)))).to_string(),
+            r#"
+            {
+                "end": {
+                    "hour":23,
+                    "minute":59
+                },
+                "start": {
+                    "hour":0,
+                    "minute":0
+                },
+                "tag": "InTimeRange"
+            }
+            "#.replace(" ", "").replace("\n", "")
+        );
+
+        assert_eq!(
+            json!(ActivationQuery::OnDaysOfMonth(DaysOfMonth::new(vec![1, 31]))).to_string(),
+            r#"
+            {
+                "days": [
+                    1,
+                    31
+                ],
+                "tag": "OnDaysOfMonth"
+            }
+            "#.replace(" ", "").replace("\n", "")
+        );
+
+        assert_eq!(
+            json!(ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![Day::Monday, Day::Tuesday]))).to_string(),
+            r#"
+            {
+                "days": [
+                    "Monday",
+                    "Tuesday"
+                ],
+                "tag": "OnDaysOfWeek"
+            }
+            "#.replace(" ", "").replace("\n", "")
+        );
+    }
+}
