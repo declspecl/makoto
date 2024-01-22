@@ -1,3 +1,5 @@
+use crate::model::{Day, Time};
+
 #[derive(Debug)]
 pub enum ActivationQuery
 {
