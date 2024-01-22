@@ -1,22 +1,26 @@
+use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 
-use serde::Serialize;
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MakotoConfig
+{
+    
+}
 
-/// MakotoState needs to be serialized to disk, but can't serialize Arc or Mutex, so
-/// instead Tauri will manage this wrapper and I will serialize the internal state to disk
-#[derive(Debug)]
-pub struct MakotoStateWrapper(pub Arc<Mutex<MakotoState>>);
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MakotoData
+{
+
+}
 
 #[derive(Debug, Serialize)]
 pub struct MakotoState
 {
-    pub test_state: u8
+    pub config: MakotoConfig,
+    pub data: MakotoData
 }
 
-impl MakotoState
-{
-    pub fn new(test_state: u8) -> Self
-    {
-        return MakotoState { test_state };
-    }
-}
+/// MakotoState needs to be serialized to disk, but can't serialize Arc or Mutex, so
+/// instead Tauri will manage this wrapper and I will serialize the internal state to disk
+#[derive(Debug)]
+pub struct MakotoStateWrapper(pub Arc< Mutex<MakotoState> >);
