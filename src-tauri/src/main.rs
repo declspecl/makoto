@@ -2,7 +2,7 @@
 
 use std::sync::{Arc, Mutex};
 
-use error::MakotoError;
+use error::{MakotoError, MakotoResult};
 use state::{MakotoConfig, MakotoData, MakotoState};
 
 use crate::state::MakotoStateWrapper;
@@ -12,7 +12,7 @@ pub mod state;
 pub mod error;
 pub mod commands;
 
-fn main()
+fn main() -> MakotoResult<()>
 {
     // proof of concept that i can create state before initializing tauri
     // in future, load partition state etc from a file here, THEN initialize tauri
@@ -28,4 +28,6 @@ fn main()
        .invoke_handler(tauri::generate_handler![])
        .run(tauri::generate_context!())
        .expect("error while running tauri application");
+
+    return Ok(());
 }
