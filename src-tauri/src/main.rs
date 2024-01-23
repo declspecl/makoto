@@ -2,7 +2,7 @@
 
 use std::sync::{Arc, Mutex};
 
-use error::{MakotoError, MakotoResult};
+use error::MakotoResult;
 use state::{MakotoConfig, MakotoData, MakotoState};
 
 use crate::state::MakotoStateWrapper;

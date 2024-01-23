@@ -83,6 +83,42 @@ impl TimeRange
     }
 }
 
+// -------------
+// - day time -
+// -------------
+
+// struct used to represent a day of the month and a time in `hour:minute` format
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DayTime
+{
+    pub day: u8,
+    pub time: Time
+}
+
+impl DayTime
+{
+    pub fn new(day: u8, time: Time) -> Self
+    {
+        return Self { day, time };
+    }
+}
+
+// struct used to represent a range of days of the month and times in `hour:minute` format
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DayTimeRange
+{
+    pub start: DayTime,
+    pub end: DayTime
+}
+
+impl DayTimeRange
+{
+    pub fn new(start: DayTime, end: DayTime) -> Self
+    {
+        return Self { start, end };
+    }
+}
+
 // ---------
 // - tests -
 // ---------
