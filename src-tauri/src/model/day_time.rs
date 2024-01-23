@@ -6,7 +6,7 @@ use serde::{Serialize, Deserialize};
 
 /// serializable enum to represent the names of the days of the week
 #[derive(Debug, Serialize, Deserialize)]
-pub enum Day
+pub enum DayOfWeek
 {
     Sunday,
     Monday,
@@ -17,103 +17,119 @@ pub enum Day
     Saturday
 }
 
-/// wrapper struct for serialization purposes of `Vec<Day>` 
+/// wrapper struct for serialization purposes of `Vec<DayOfWeek>` 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DaysOfWeek
 {
-    pub days: Vec<Day>
+    pub days: Vec<DayOfWeek>
 }
 
 impl DaysOfWeek
 {
-    pub fn new(days: Vec<Day>) -> Self
+    pub fn new(days: Vec<DayOfWeek>) -> Self
     {
         return Self { days };
     }
 }
+
+/// serializable enum containing the twelve gregorian calendar names
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Month
+{
+    January,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    September,
+    October,
+    November,
+    December
+}
+
+/// alias for `u8` representing the numerical day of the month (i.e. 24th, 1st, 13th)
+pub type DayOfMonth = u8;
 
 /// wrapper struct for serialization purposes of `Vec<u8>` 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DaysOfMonth
 {
-    pub days: Vec<u8>
+    pub days: Vec<DayOfMonth>
 }
 
 impl DaysOfMonth
 {
-    pub fn new(days: Vec<u8>) -> Self
+    pub fn new(days: Vec<DayOfMonth>) -> Self
     {
         return Self { days };
     }
 }
 
+/// alias for `u64` to represent (pretty much) any positive year numerically
+pub type Year = u64;
+
 // --------
 // - time -
 // --------
+
+/// alias for `u8` representing a numerical hour in 24-hour time (i.e. 2:xx, 14:xx)
+pub type Hour = u8;
+
+/// alias for `u8` representing a numerical minute (i.e. x:08, x:51)
+pub type Minute = u8;
 
 /// struct to represent a time in the format `hour:minute` where `hour` and `minute` are `u8`s
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Time
 {
-    pub hour: u8,
-    pub minute: u8
+    pub hour: Hour,
+    pub minute: Minute
 }
 
 impl Time
 {
-    pub fn new(hour: u8, minute: u8) -> Self
+    pub fn new(hour: Hour, minute: Minute) -> Self
     {
         return Self { hour, minute };
     }
 }
 
-/// struct to represent a time range in the format `hour:minute-hour:minute` for the same day
+// -----------------
+// - point in time -
+// -----------------
+
+/// struct that represents an exact point in time (a year, a month, a numerical day of the month, and a time)
 #[derive(Debug, Serialize, Deserialize)]
-pub struct TimeRange
+pub struct PointInTime
 {
-    pub start: Time,
-    pub end: Time
-}
-
-impl TimeRange
-{
-    pub fn new(start: Time, end: Time) -> Self
-    {
-        return Self { start, end };
-    }
-}
-
-// -------------
-// - day time -
-// -------------
-
-// struct used to represent a day of the month and a time in `hour:minute` format
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DayTime
-{
-    pub day: u8,
+    pub year: Year,
+    pub month: Month,
+    pub day_of_month: DayOfMonth,
     pub time: Time
 }
 
-impl DayTime
+impl PointInTime
 {
-    pub fn new(day: u8, time: Time) -> Self
+    pub fn new(year: Year, month: Month, day_of_month: DayOfMonth, time: Time) -> Self
     {
-        return Self { day, time };
+        return Self { year, month, day_of_month, time };
     }
 }
 
-// struct used to represent a range of days of the month and times in `hour:minute` format
+/// struct that represents a period of time aka a range of two `PointInTime`s
 #[derive(Debug, Serialize, Deserialize)]
-pub struct DayTimeRange
+pub struct PeriodOfTime
 {
-    pub start: DayTime,
-    pub end: DayTime
+    pub start: PointInTime,
+    pub end: PointInTime
 }
 
-impl DayTimeRange
+impl PeriodOfTime
 {
-    pub fn new(start: DayTime, end: DayTime) -> Self
+    pub fn new(start: PointInTime, end: PointInTime) -> Self
     {
         return Self { start, end };
     }
