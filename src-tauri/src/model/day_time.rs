@@ -1,8 +1,8 @@
 use serde::{Serialize, Deserialize};
 
-// --------
-// - day -
-// --------
+// -------------------------
+// - date based structures -
+// -------------------------
 
 /// serializable enum to represent the names of the days of the week
 #[derive(Debug, Serialize, Deserialize)]
@@ -71,15 +71,15 @@ impl DaysOfMonth
 /// alias for `u64` to represent (pretty much) any positive year numerically
 pub type Year = u64;
 
-// --------
-// - time -
-// --------
-
-/// alias for `u8` representing a numerical hour in 24-hour time (i.e. 2:xx, 14:xx)
-pub type Hour = u8;
+// -------------------------
+// - time based structures -
+// -------------------------
 
 /// alias for `u8` representing a numerical minute (i.e. x:08, x:51)
 pub type Minute = u8;
+
+/// alias for `u8` representing a numerical hour in 24-hour time (i.e. 2:xx, 14:xx)
+pub type Hour = u8;
 
 /// struct to represent a time in the format `hour:minute` where `hour` and `minute` are `u8`s
 #[derive(Debug, Serialize, Deserialize)]
@@ -135,38 +135,40 @@ impl PeriodOfTime
     }
 }
 
-// ---------
-// - tests -
-// ---------
+// --------------
+// - unit tests -
+// --------------
 
-/// serialization integration tests for `crate::model::day_time`
+/// serialization unit tests for `crate::model::day_time`
 #[cfg(test)]
-mod tests
+mod serialization_tests
 {
     use super::*;
 
     use serde_json::json;
 
-    // -------
-    // - day -
-    // -------
+    // ---------------------
+    // - day related tests -
+    // ---------------------
 
-    /// ensures correct json serialization of the `Day` enum
+    /// ensures correct json serialization of the `DayOfWeek` enum
     #[test]
-    fn test_day_serialization()
+    fn day_of_week()
     {
         assert_eq!(
-            json!(Day::Sunday),
+            json!(DayOfWeek::Sunday),
             r#"Sunday"#
         );
     }
 
     /// ensures correct json serialization of the `DaysOfWeek` struct
     #[test]
-    fn test_days_of_week_serialization()
+    fn days_of_week()
     {
         assert_eq!(
-            json!(DaysOfWeek::new(vec![Day::Monday, Day::Tuesday])).to_string(),
+            json!(DaysOfWeek::new(
+                vec![DayOfWeek::Monday, DayOfWeek::Tuesday]
+            )).to_string(),
             r#"
             {
                 "days": [
@@ -178,12 +180,24 @@ mod tests
         );
     }
 
-    /// ensures correct json serialization of the `DaysOfMonth` struct
+    /// ensures correct json serialization of the `Month` enum
     #[test]
-    fn test_days_of_month_serialization()
+    fn month()
     {
         assert_eq!(
-            json!(DaysOfMonth::new(vec![1, 31])).to_string(),
+            json!(Month::February),
+            r#"February"#
+        );
+    }
+
+    /// ensures correct json serialization of the `DaysOfMonth` struct
+    #[test]
+    fn days_of_month()
+    {
+        assert_eq!(
+            json!(DaysOfMonth::new(
+                vec![1, 31]
+            )).to_string(),
             r#"
             {
                 "days": [
@@ -195,41 +209,45 @@ mod tests
         );
     }
 
-    // --------
-    // - time -
-    // --------
+    // ----------------------
+    // - time related tests -
+    // ----------------------
 
     /// ensures correct json serialization of the `Time` struct
     #[test]
-    fn test_time_serialization()
+    fn time()
     {
         assert_eq!(
             json!(Time::new(0, 0)).to_string(),
             r#"
             {
-                "hour":0,
-                "minute":0
+                "hour": 0,
+                "minute": 0
             }
             "#.replace(" ", "").replace("\n", "")
         );
     }
 
-    /// ensures correct json serialization of the `TimeRange` struct
+    /// ensures correct json serialization of the `PointInTime` struct
     #[test]
-    fn test_time_range_serialization()
+    fn point_in_time()
     {
         assert_eq!(
-            json!(TimeRange::new(Time::new(0, 0), Time::new(23, 59))).to_string(),
+            json!(PointInTime::new(
+                2024,
+                Month::January,
+                23,
+                Time::new(16, 46)
+            )).to_string(),
             r#"
             {
-                "end": {
-                    "hour":23,
-                    "minute":59
+                "day_of_month": 23,
+                "month": "January",
+                "time": {
+                    "hour": 16,
+                    "minute": 46
                 },
-                "start": {
-                    "hour":0,
-                    "minute":0
-                }
+                "year": 2024
             }
             "#.replace(" ", "").replace("\n", "")
         );

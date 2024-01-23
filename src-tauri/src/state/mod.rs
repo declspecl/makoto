@@ -28,7 +28,7 @@ pub struct WindowProperties
     pub title: String
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone))
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MakotoProperties
 {
     

@@ -1,10 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-use super::day_time::{TimeRange, DaysOfWeek, DaysOfMonth};
-
-// ----------------------
-// - ActivationOperator -
-// ----------------------
+use super::day_time::{DaysOfWeek, DaysOfMonth, PeriodOfTime};
 
 /// enum for `ActivationModifier`s to identify it as either an `AND` or `OR` condition modifier
 #[derive(Debug, Serialize, Deserialize)]
@@ -14,23 +10,15 @@ pub enum ActivationOperator
     OR
 }
 
-// -------------------
-// - ActivationQuery -
-// -------------------
-
 /// enum to represent a query for when a `Partition` should be "active"
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "tag")]
 pub enum ActivationQuery
 {
-    InTimeRange(TimeRange),
+    InPeriodOfTime(PeriodOfTime),
     OnDaysOfWeek(DaysOfWeek),
     OnDaysOfMonth(DaysOfMonth),
 }
-
-// ----------------------
-// - ActivationModifier -
-// ----------------------
 
 /// struct to represent an additional `ActivationQuery` and `ActivationOperator` pair that modifies a base `ActivationQuery` with another activation condition
 #[derive(Debug, Serialize, Deserialize)]
@@ -48,27 +36,22 @@ impl ActivationModifier
     }
 }
 
-// ---------
-// - tests -
-// ---------
+// --------------
+// - unit tests -
+// --------------
 
-/// serialization unit tests for `crate::model::partition`
+/// serialization unit tests for `crate::model::activation`
 #[cfg(test)]
-mod tests
+mod serialization_tests
 {
     use super::*;
+    use crate::model::day_time::{DayOfWeek, DaysOfMonth, DaysOfWeek, Month, PointInTime, Time};
 
     use serde_json::json;
 
-    use crate::model::day_time::{Day, Time, DaysOfWeek, DaysOfMonth};
-
-    // -----------------------
-    // - activation operator -
-    // -----------------------
-
     /// ensures correct json serialization of the `ActivationOperator` enum
     #[test]
-    fn test_activation_operator_serialization()
+    fn activation_operator()
     {
         assert_eq!(
             json!(ActivationOperator::AND),
@@ -81,27 +64,38 @@ mod tests
         );
     }
 
-    // --------------------
-    // - activation query -
-    // --------------------
-
     /// ensures correct json serialization of the `ActivationQuery` enum with the variant `ActivationQuery::InTimeRange`
     #[test]
-    fn test_activation_query_time_range_serialization()
+    fn activation_query()
     {
         assert_eq!(
-            json!(ActivationQuery::InTimeRange(TimeRange::new(Time::new(0, 0), Time::new(23, 59)))).to_string(),
+            json!(ActivationQuery::InPeriodOfTime(
+                PeriodOfTime::new(
+                    PointInTime::new(2024, Month::January, 23, Time::new(0, 0)),
+                    PointInTime::new(2024, Month::January, 23, Time::new(23, 59)),
+                )
+            )).to_string(),
             r#"
             {
                 "end": {
-                    "hour":23,
-                    "minute":59
+                    "day_of_month": 23,
+                    "month": "January",
+                    "time": {
+                        "hour": 23,
+                        "minute": 59
+                    },
+                    "year": 2024
                 },
                 "start": {
-                    "hour":0,
-                    "minute":0
+                    "day_of_month": 23,
+                    "month": "January",
+                    "time": {
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "year": 2024
                 },
-                "tag": "InTimeRange"
+                "tag": "InPeriodOfTime"
             }
             "#.replace(" ", "").replace("\n", "")
         );
@@ -109,10 +103,10 @@ mod tests
 
     /// ensures correct json serialization of the `ActivationQuery` enum with the variant `ActivationQuery::OnDaysOfWeek`
     #[test]
-    fn test_activation_query_days_of_week_serialization()
+    fn activation_query_days_of_week()
     {
         assert_eq!(
-            json!(ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![Day::Monday, Day::Tuesday]))).to_string(),
+            json!(ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![DayOfWeek::Monday, DayOfWeek::Tuesday]))).to_string(),
             r#"
             {
                 "days": [
@@ -127,7 +121,7 @@ mod tests
 
     /// ensures correct json serialization of the `ActivationQuery` enum with the variant `ActivationQuery::OnDaysOfMonth`
     #[test]
-    fn test_activation_query_days_of_month_serialization()
+    fn activation_query_days_of_month()
     {
         assert_eq!(
             json!(ActivationQuery::OnDaysOfMonth(DaysOfMonth::new(vec![1, 31]))).to_string(),
@@ -143,17 +137,13 @@ mod tests
         );
     }
 
-    // -----------------------
-    // - activation modifier -
-    // -----------------------
-
     /// ensures correct json serialization of the `ActivationModifier` struct
     #[test]
-    fn test_activation_modifier_serialization()
+    fn activation_modifier()
     {
         assert_eq!(
             json!(ActivationModifier::new(
-                ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![Day::Monday, Day::Tuesday])),
+                ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![DayOfWeek::Monday, DayOfWeek::Tuesday])),
                 ActivationOperator::AND
             )).to_string(),
             r#"
