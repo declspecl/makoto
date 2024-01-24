@@ -19,6 +19,7 @@ fn serialize_serde_yaml_error<S>(error: &serde_yaml::Error, serializer: S) -> Re
 
 /// enum that wraps all the possible errros that may occur in the makoto backend
 #[derive(thiserror::Error, Debug, Serialize)]
+#[serde(tag = "tag", content = "error")]
 pub enum MakotoError
 {
     #[error("Underlying IOError of type \"{}\": \"{0}\"", .0.kind())]

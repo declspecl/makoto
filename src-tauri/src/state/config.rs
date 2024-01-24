@@ -86,7 +86,10 @@ impl MakotoConfig
     pub fn try_deserialize_from_config(config_file_path: &Path) -> MakotoResult<Self>
     {
         // create parent and own directories if they don't exist
-        fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+        if !config_file_path.exists()
+        {
+            fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+        }
 
         // create file if it doesn't exist (need to use write), in read mode to deserialize
         let mut config_file = OpenOptions::new()
@@ -113,7 +116,10 @@ impl MakotoConfig
     pub fn try_serialize_to_config(&self, config_file_path: &Path) -> MakotoResult<()>
     {
         // create parent and own directories if they don't exist
-        fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+        if !config_file_path.exists()
+        {
+            fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+        }
 
         // open config file in write mode and create it if it doesn't exist
         let mut config_file = OpenOptions::new()
