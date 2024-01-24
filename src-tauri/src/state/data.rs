@@ -12,7 +12,13 @@ pub struct MakotoData
 {
     pub raw_partitions: Vec<RawPartition>,
     pub partition_rules: Vec<PartitionRule>,
-    pub tags: HashMap<String, Tag>
+    pub tags: HashMap<String, Tag>,
+
+    /// phantom attribute being stored in `MakotoData` for easy access and because its idiomatic
+    /// buffer containing any errors that happened in the startup of the program
+    /// will not be serialized or deserialize to/from disk or the frontend, but it can be accessed with the `get_startup_error_log` command
+    #[serde(skip)]
+    pub startup_error_log: Vec<String>
 }
 
 impl Default for MakotoData
@@ -23,7 +29,8 @@ impl Default for MakotoData
         {
             raw_partitions: Vec::new(),
             partition_rules: Vec::new(),
-            tags: HashMap::new()
+            tags: HashMap::new(),
+            startup_error_log: Vec::new()
         };
     }
 }

@@ -14,3 +14,7 @@ export function update_state_config(new_config: MakotoConfig): Promise<void> {
 export function update_state_data(new_data: MakotoData): Promise<void> {
     return invoke("update_state_data", { new_data });
 }
+
+export function get_startup_error_log(): Promise<string[]> {
+    return invoke<string[]>("get_startup_error_log");
+}

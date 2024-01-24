@@ -23,3 +23,11 @@ pub fn update_state_data(state: tauri::State<MakotoStateWrapper>, new_data: Mako
 
     state.data = new_data;
 }
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn get_startup_error_log(state: tauri::State<MakotoStateWrapper>) -> Vec<String>
+{
+    let state = state.0.lock().unwrap();
+
+    return state.data.startup_error_log.clone();
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MakotoState } from "./backend/state";
 import { StateContext } from "./contexts/StateContext";
-import { get_state } from "./backend/commands";
+import { get_startup_error_log, get_state } from "./backend/commands";
 
 export default function App() {
     const [makotoState, setMakotoState] = useState<MakotoState | null>(null);
@@ -17,7 +17,16 @@ export default function App() {
             }
         }
 
+        async function err() {
+            const startupErrorLog = await get_startup_error_log();
+
+            console.log(startupErrorLog);
+        }
+
         initializeMakotoState();
+        err();
+
+        console.log()
 
         return () => {
             isCancelled = true;
