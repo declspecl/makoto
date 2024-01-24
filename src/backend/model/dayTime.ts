@@ -1,25 +1,61 @@
-// -------
-// - day -
-// -------
-export type Day = "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
+// -------------------------
+// - date based structures -
+// -------------------------
+
+export type DayOfWeek = "Sunday"
+                      | "Monday"
+                      | "Tuesday"
+                      | "Wednesday"
+                      | "Thursday"
+                      | "Friday"
+                      | "Saturday";
 
 export interface DaysOfWeek {
-    days: Day[]
+    days: DayOfWeek[]
 }
+
+export type Month = "January"
+                  | "February"
+                  | "March"
+                  | "April"
+                  | "May"
+                  | "June"
+                  | "July"
+                  | "August"
+                  | "September"
+                  | "October"
+                  | "November"
+                  | "December";
+
+export type DayOfMonth = number;
 
 export interface DaysOfMonth {
-    days: number[]
+    days: DayOfMonth[]
 }
 
-// --------
-// - time -
-// --------
+export type Year = number;
+
+// -------------------------
+// - time based structures -
+// -------------------------
+
+export type Minute = number;
+
+export type Hour = number;
+
 export interface Time {
-    hour: number,
-    minute: number
+    hour: Hour,
+    minute: Minute
 }
 
-export interface TimeRange {
-    start: Time,
-    end: Time
+export interface PointInTime {
+    year: Year,
+    month: Month,
+    day_of_month: DayOfMonth,
+    time: Time
+}
+
+export interface PeriodOfTime {
+    start: PointInTime,
+    end: PointInTime
 }

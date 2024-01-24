@@ -1,32 +1,15 @@
-// -----------------------
-// - activation operator -
-// -----------------------
-import { DaysOfMonth, DaysOfWeek, TimeRange } from "./dayTime";
+import { PeriodOfTime } from "./dayTime";
+import { ActivationModifier, ActivationQuery } from "./activation";
 
-// -----------------------
-export type ActivationOperator = "AND" | "OR";
-
-// --------------------
-// - activation query -
-// --------------------
-interface ActivationQueryInTimeRange extends TimeRange {
-    tag: "InTimeRange"
+export interface RawPartition {
+    title: string,
+    description: string,
+    period_of_time: PeriodOfTime
 }
 
-interface ActivationQueryOnDaysOfWeek extends DaysOfWeek {
-    tag: "OnDaysOfWeek"
-}
-
-interface ActivationQueryOnDaysOfMonth extends DaysOfMonth {
-    tag: "OnDaysOfMonth"
-}
-
-export type ActivationQuery = ActivationQueryInTimeRange | ActivationQueryOnDaysOfWeek | ActivationQueryOnDaysOfMonth;
-
-// -----------------------
-// - activation modifier -
-// -----------------------
-export interface ActivationModifier {
+export interface PartitionRule {
+    title: string,
+    description: string,
     query: ActivationQuery,
-    operator: ActivationOperator
+    query_modifiers: ActivationModifier[]
 }

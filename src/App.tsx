@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@components/ui/Button";
 import { try_deserialize_from_config_file, try_serialize_default_config } from "./backend/commands";
 
