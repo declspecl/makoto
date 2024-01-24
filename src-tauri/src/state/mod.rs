@@ -8,7 +8,7 @@ use serde::Serialize;
 use std::sync::{Arc, Mutex};
 
 /// serializable struct that represents the user configuration and the user data
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct MakotoState
 {
     pub config: MakotoConfig,

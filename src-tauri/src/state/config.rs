@@ -56,7 +56,7 @@ pub struct MakotoProperties
 }
 
 /// serializable struct that represents the user configuration i.e. window settings, etc.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MakotoConfig
 {
     pub window_properties: WindowProperties,
@@ -77,25 +77,33 @@ impl Default for MakotoConfig
 
 impl MakotoConfig
 {
+    /// performs the initial setup of the config file at the given path by creating the full path and writing the default config to it
+    fn set_up_config_file(config_file_path: &Path) -> MakotoResult<()>
+    {
+        // create parent and own directories if they don't exist
+        fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+
+        let serialized_config = serde_yaml::to_string(&MakotoConfig::default())?;
+
+        return Ok(fs::write(&config_file_path, &serialized_config)?);
+    }
+
     /// attempts to deserialize a `MakotoConfig` struct from the config file at the given path.
     /// errors can happen due to multiple reasons including:
     /// - the config file parent path is invalid
-    /// - the config file fails to open
+    /// - the config file fails to be written to
     /// - the config file contents are not valid utf-8
     /// - the deserialization itself (config file is invalid YAML / doesn't align with struct)
     pub fn try_deserialize_from_config(config_file_path: &Path) -> MakotoResult<Self>
     {
-        // create parent and own directories if they don't exist
         if !config_file_path.exists()
         {
-            fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+            Self::set_up_config_file(config_file_path)?;
         }
 
         // create file if it doesn't exist (need to use write), in read mode to deserialize
         let mut config_file = OpenOptions::new()
             .read(true)
-            .write(true)
-            .create(true)
             .open(config_file_path)?;
 
         let mut config_file_contents: String = String::with_capacity(200);
@@ -115,16 +123,14 @@ impl MakotoConfig
     /// - an error occured when trying to write to the file
     pub fn try_serialize_to_config(&self, config_file_path: &Path) -> MakotoResult<()>
     {
-        // create parent and own directories if they don't exist
         if !config_file_path.exists()
         {
-            fs::create_dir_all(config_file_path.parent().ok_or(MakotoError::FailedToGetPath("config file parent".into()))?)?;
+            Self::set_up_config_file(config_file_path)?;
         }
 
         // open config file in write mode and create it if it doesn't exist
         let mut config_file = OpenOptions::new()
             .write(true)
-            .create(true)
             .open(config_file_path)?;
 
         // convert config object to yaml string

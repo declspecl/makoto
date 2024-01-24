@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 use super::day_time::{DaysOfWeek, DaysOfMonth, PeriodOfTime};
 
 /// enum for `ActivationModifier`s to identify it as either an `AND` or `OR` condition modifier
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ActivationOperator
 {
     AND,
@@ -11,7 +11,7 @@ pub enum ActivationOperator
 }
 
 /// enum to represent a query for when a `Partition` should be "active"
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(tag = "tag")]
 pub enum ActivationQuery
 {
@@ -21,7 +21,7 @@ pub enum ActivationQuery
 }
 
 /// struct to represent an additional `ActivationQuery` and `ActivationOperator` pair that modifies a base `ActivationQuery` with another activation condition
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ActivationModifier
 {
     pub query: ActivationQuery,

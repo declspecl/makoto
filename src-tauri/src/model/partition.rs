@@ -4,7 +4,7 @@ use super::{activation::{ActivationQuery, ActivationModifier}, day_time::PeriodO
 
 /// struct used for a one-off partition, like an "event"
 /// can not reoccur, has a `title`, `decription`, and is active during the span of the given `PeriodOfTime`
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RawPartition
 {
     pub title: String,
@@ -23,7 +23,7 @@ impl RawPartition
 /// struct used for a partition that has a more complicated condition for when it should be active.
 /// used for imitating "reoccuring" behavior in typical events.
 /// MUST have a base `ActivationQuery`, and can have 0+ `ActivationModifier`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PartitionRule
 {
     pub title: String,

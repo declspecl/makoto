@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 // -------------------------
 
 /// serializable enum to represent the names of the days of the week
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum DayOfWeek
 {
     Sunday,
@@ -18,7 +18,7 @@ pub enum DayOfWeek
 }
 
 /// wrapper struct for serialization purposes of `Vec<DayOfWeek>` 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DaysOfWeek
 {
     pub days: Vec<DayOfWeek>
@@ -33,7 +33,7 @@ impl DaysOfWeek
 }
 
 /// serializable enum containing the twelve gregorian calendar names
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum Month
 {
     January,
@@ -54,7 +54,7 @@ pub enum Month
 pub type DayOfMonth = u8;
 
 /// wrapper struct for serialization purposes of `Vec<u8>` 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DaysOfMonth
 {
     pub days: Vec<DayOfMonth>
@@ -82,7 +82,7 @@ pub type Minute = u8;
 pub type Hour = u8;
 
 /// struct to represent a time in the format `hour:minute` where `hour` and `minute` are `u8`s
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Time
 {
     pub hour: Hour,
@@ -102,7 +102,7 @@ impl Time
 // -----------------
 
 /// struct that represents an exact point in time (a year, a month, a numerical day of the month, and a time)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PointInTime
 {
     pub year: Year,
@@ -120,7 +120,7 @@ impl PointInTime
 }
 
 /// struct that represents a period of time aka a range of two `PointInTime`s
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PeriodOfTime
 {
     pub start: PointInTime,
