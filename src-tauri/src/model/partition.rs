@@ -20,9 +20,9 @@ impl RawPartition
     }
 }
 
-/// struct used for a partition that has a more complicated condition for when it should be active
-/// used for imitating "reoccuring" behavior in typical events
-/// MUST have a base `ActivationQuery`, and can have 0+ `ActivationModifier`
+/// struct used for a partition that has a more complicated condition for when it should be active.
+/// used for imitating "reoccuring" behavior in typical events.
+/// MUST have a base `ActivationQuery`, and can have 0+ `ActivationModifier`.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PartitionRule
 {
