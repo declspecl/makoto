@@ -40,6 +40,7 @@ fn main() -> MakotoResult<()>
             let mut main_window = tauri::WindowBuilder::new(app, "MainWindow", tauri::WindowUrl::App("/index.html".into()))
                 .resizable(true)
                 .title(window_properties.title)
+                .maximized(window_properties.maximized)
                 .fullscreen(window_properties.fullscreen);
 
             // centering window

@@ -29,6 +29,7 @@ pub struct WindowProperties
     
     // position
     pub initial_position: Option<XYPair>,
+    pub maximized: bool,
     pub fullscreen: bool,
     pub centered: bool,
 
@@ -47,8 +48,9 @@ impl Default for WindowProperties
             maximum_inner_size: None,
 
             initial_position: None,
+            maximized: false,
             fullscreen: false,
-            centered: true,
+            centered: false,
 
             title: "makoto".into()
         };
