@@ -12,7 +12,7 @@ pub mod state;
 pub mod error;
 pub mod commands;
 
-use commands::{try_deserialize_from_config_file, try_serialize_default_config, try_serialize_default_data, try_deserialize_from_data_file};
+use commands::*;
 
 fn main() -> MakotoResult<()>
 {
@@ -78,11 +78,9 @@ fn main() -> MakotoResult<()>
         })
         .manage(MakotoStateWrapper(Arc::new(Mutex::new(MakotoState { config, data }))))
         .invoke_handler(tauri::generate_handler![
-             try_serialize_default_config,
-             try_deserialize_from_config_file,
-             try_serialize_default_data,
-             try_deserialize_from_data_file
-         ])
+            update_state_config,
+            update_state_data
+        ])
         .run(app_context)
         .expect("error while running tauri application");
 
