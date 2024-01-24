@@ -1,41 +1,33 @@
 import { get_state } from "@/backend/commands";
 import { MakotoState } from "@/backend/state";
-import { StateContext } from "@/contexts/StateContext";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { MakotoStateContext, makotoStateReducer } from "@/contexts/StateContext";
 
 interface MakotoStateLoaderProps {
     children: React.ReactNode
 }
 
 export function MakotoStateLoader({ children }: MakotoStateLoaderProps) {
-    const [makotoState, setMakotoState] = useState<MakotoState | undefined>(undefined);
+    const [makotoState, dispatch] = useReducer(makotoStateReducer, undefined!);
 
     useEffect(() => {
-        let isCancelled = false;
-
-        async function getMakotoStateFromBackend() {
+        async function initializeMakotoState() {
             const state = await get_state();
 
-            if (!isCancelled) {
-                setMakotoState(state);
-            }
+            dispatch({ type: "overrideData", data: state.data });
         }
 
-        getMakotoStateFromBackend();
-
-        return () => {
-            isCancelled = true;
-        }
+        initializeMakotoState();
     }, []);
 
     return (
         <>
             {makotoState === undefined ? (
-                <p>loading makoto state...</p>
+                <p>loading state...</p>
             ) : (
-                <StateContext.Provider value={makotoState}>
+                <MakotoStateContext.Provider value={[makotoState, dispatch]}>
                     {children}
-                </StateContext.Provider>
+                </MakotoStateContext.Provider>
             )}
         </>
     )
