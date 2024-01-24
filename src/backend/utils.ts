@@ -1,4 +1,5 @@
-import { RgbColor } from "./tag";
+import { MakotoState } from "./state";
+import { RgbColor, Tag } from "./tag";
 
 export function hexColorToRgbColor(hexColor: string) {
     if (hexColor.charAt(0) === '#') {
@@ -16,4 +17,8 @@ export function hexColorToRgbColor(hexColor: string) {
 
 export function rgbColorToHexColor(rgbColor: RgbColor) {
     return `#${rgbColor.r.toString(16)}${rgbColor.g.toString(16)}${rgbColor.b.toString(16)}`;
+}
+
+export async function createTag(state: MakotoState, tag: Tag): Promise<void> {
+    state.data.tags[tag.name] = tag;
 }
