@@ -37,10 +37,39 @@ fn main() -> MakotoResult<()>
     tauri::Builder::default()
         .setup(move |app| -> Result<(), Box<dyn std::error::Error>> {
             // defining main window
-            let main_window = tauri::WindowBuilder::new(app, "MainWindow", tauri::WindowUrl::App("/index.html".into()))
+            let mut main_window = tauri::WindowBuilder::new(app, "MainWindow", tauri::WindowUrl::App("/index.html".into()))
                 .resizable(true)
                 .title(window_properties.title)
                 .fullscreen(window_properties.fullscreen);
+
+            // centering window
+            if window_properties.centered
+            {
+                main_window = main_window.center();
+            }
+            // if user does not want it to start centered, check if they specified a position
+            else if let Some(position) = window_properties.initial_position
+            {
+                main_window = main_window.position(position.x, position.y);
+            }
+
+            // min size
+            if let Some(size) = window_properties.initial_inner_size
+            {
+                main_window = main_window.inner_size(size.width, size.height);
+            }
+
+            // initial size
+            if let Some(size) = window_properties.minimum_inner_size
+            {
+                main_window = main_window.min_inner_size(size.width, size.height);
+            }
+
+            // max size
+            if let Some(size) = window_properties.maximum_inner_size
+            {
+                main_window = main_window.max_inner_size(size.width, size.height);
+            }
 
             main_window.build()?;
 

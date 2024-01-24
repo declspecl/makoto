@@ -3,22 +3,32 @@ use crate::error::{MakotoError, MakotoResult};
 use std::{fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
 use serde::{Serialize, Deserialize};
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct XYPair
+{
+    pub x: f64,
+    pub y: f64
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct WidthHeightPair
+{
+    pub width: f64,
+    pub height: f64
+}
+
 /// serializable struct that holds all of the window-related user configuration options in the config.yaml file
 /// these are all settings that the program needs to restart in order to see the effects of
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct WindowProperties
 {
     // sizing
-    pub initial_width: Option<f64>,
-    pub initial_height: Option<f64>,
-    pub minimum_width: Option<f64>,
-    pub minimum_height: Option<f64>,
-    pub maximum_width: Option<f64>,
-    pub maximum_height: Option<f64>,
+    pub initial_inner_size: Option<WidthHeightPair>,
+    pub minimum_inner_size: Option<WidthHeightPair>,
+    pub maximum_inner_size: Option<WidthHeightPair>,
     
     // position
-    pub x_position: Option<f64>,
-    pub y_position: Option<f64>,
+    pub initial_position: Option<XYPair>,
     pub fullscreen: bool,
     pub centered: bool,
 
@@ -32,17 +42,13 @@ impl Default for WindowProperties
     {
         return Self
         {
-            initial_width: None,
-            initial_height: None,
-            minimum_width: None,
-            minimum_height: None,
-            maximum_width: None,
-            maximum_height: None,
+            initial_inner_size: None,
+            minimum_inner_size: None,
+            maximum_inner_size: None,
 
-            x_position: None,
-            y_position: None,
+            initial_position: None,
             fullscreen: false,
-            centered: false,
+            centered: true,
 
             title: "makoto".into()
         };

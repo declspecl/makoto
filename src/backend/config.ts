@@ -1,15 +1,20 @@
+export interface XYPair {
+    x: number,
+    y: number
+}
+
+export interface WidthHeightPair {
+    width: number,
+    height: number
+}
+
 export interface WindowProperties {
     // sizing
-    initial_width?: number,
-    initial_height?: number,
-    minimum_width?: number,
-    minimum_height?: number,
-    maximum_width?: number,
-    maximum_height?: number,
-
-    // position
-    x_position?: number,
-    y_position?: number,
+    initial_inner_size?: WidthHeightPair,
+    minimum_inner_size?: WidthHeightPair,
+    maximum_inner_size?: WidthHeightPair,
+    
+    initial_position?: XYPair,
     fullscreen: boolean,
     centered: boolean,
 
