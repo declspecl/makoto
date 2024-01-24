@@ -15,6 +15,7 @@ export interface WindowProperties {
     maximum_inner_size?: WidthHeightPair,
     
     initial_position?: XYPair,
+    maximized: boolean,
     fullscreen: boolean,
     centered: boolean,
 
