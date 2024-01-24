@@ -1,15 +1,18 @@
 import { PeriodOfTime } from "./dayTime";
 import { ActivationModifier, ActivationQuery } from "./activation";
+import { Tag } from "../tag";
 
 export interface RawPartition {
     title: string,
     description: string,
-    period_of_time: PeriodOfTime
+    period_of_time: PeriodOfTime,
+    tag_names: Tag[]
 }
 
 export interface PartitionRule {
     title: string,
     description: string,
     query: ActivationQuery,
-    query_modifiers: ActivationModifier[]
+    query_modifiers: ActivationModifier[],
+    tag_names: Tag[]
 }

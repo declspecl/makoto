@@ -1,3 +1,4 @@
+pub mod tag;
 pub mod data;
 pub mod config;
 

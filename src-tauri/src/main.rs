@@ -79,7 +79,8 @@ fn main() -> MakotoResult<()>
         .manage(MakotoStateWrapper(Arc::new(Mutex::new(MakotoState { config, data }))))
         .invoke_handler(tauri::generate_handler![
             update_state_config,
-            update_state_data
+            update_state_data,
+            get_state
         ])
         .run(app_context)
         .expect("error while running tauri application");

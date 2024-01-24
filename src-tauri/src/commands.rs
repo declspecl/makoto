@@ -1,4 +1,12 @@
-use crate::{error::MakotoResult, state::{config::MakotoConfig, data::MakotoData, MakotoStateWrapper}};
+use crate::{error::MakotoResult, state::{config::MakotoConfig, data::MakotoData, MakotoState, MakotoStateWrapper}};
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn get_state(state: tauri::State<MakotoStateWrapper>) -> MakotoResult<MakotoState>
+{
+    let state = state.0.lock().unwrap();
+
+    return Ok(state.clone());
+}
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn update_state_config(state: tauri::State<MakotoStateWrapper>, new_config: MakotoConfig)

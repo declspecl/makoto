@@ -1,15 +1,18 @@
-use std::{fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
+use std::{collections::HashMap, fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
 
 use serde::{Serialize, Deserialize};
 
+use super::tag::Tag;
 use crate::{error::{MakotoError, MakotoResult}, model::partition::{PartitionRule, RawPartition}};
 
 /// serializable struct that represents the user data i.e. partitions, partition rules, etc.
+/// holds all partitions and all created partition tags
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MakotoData
 {
     pub raw_partitions: Vec<RawPartition>,
-    pub partition_rules: Vec<PartitionRule>
+    pub partition_rules: Vec<PartitionRule>,
+    pub tags: HashMap<String, Tag>
 }
 
 impl Default for MakotoData
@@ -19,7 +22,8 @@ impl Default for MakotoData
         return Self
         {
             raw_partitions: Vec::new(),
-            partition_rules: Vec::new()
+            partition_rules: Vec::new(),
+            tags: HashMap::new()
         };
     }
 }

@@ -4,39 +4,43 @@ use super::{activation::{ActivationQuery, ActivationModifier}, day_time::PeriodO
 
 /// struct used for a one-off partition, like an "event"
 /// can not reoccur, has a `title`, `decription`, and is active during the span of the given `PeriodOfTime`
+/// applied tags can be gotten by using `tag_names` entries as keys in `MakotoData::tags`'s `HashMap``
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RawPartition
 {
     pub title: String,
     pub description: String,
-    pub period_of_time: PeriodOfTime
+    pub period_of_time: PeriodOfTime,
+    pub tag_names: Vec<String>
 }
 
 impl RawPartition
 {
-    pub fn new(title: String, description: String, period_of_time: PeriodOfTime) -> Self
+    pub fn new(title: String, description: String, period_of_time: PeriodOfTime, tag_names: Vec<String>) -> Self
     {
-        return Self { title, description, period_of_time };
+        return Self { title, description, period_of_time, tag_names };
     }
 }
 
 /// struct used for a partition that has a more complicated condition for when it should be active.
 /// used for imitating "reoccuring" behavior in typical events.
 /// MUST have a base `ActivationQuery`, and can have 0+ `ActivationModifier`.
+/// applied tags can be gotten by using `tag_names` entries as keys in `MakotoData::tags`'s `HashMap``
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PartitionRule
 {
     pub title: String,
     pub description: String,
     pub query: ActivationQuery,
-    pub query_modifiers: Vec<ActivationModifier>
+    pub query_modifiers: Vec<ActivationModifier>,
+    pub tag_names: Vec<String>
 }
 
 impl PartitionRule
 {
-    pub fn new(title: String, description: String, query: ActivationQuery, query_modifiers: Vec<ActivationModifier>) -> Self
+    pub fn new(title: String, description: String, query: ActivationQuery, query_modifiers: Vec<ActivationModifier>, tag_names: Vec<String>) -> Self
     {
-        return Self { title, description, query, query_modifiers };
+        return Self { title, description, query, query_modifiers, tag_names };
     }
 }
 
@@ -65,6 +69,7 @@ mod serialization_tests
                     PointInTime::new(2024, Month::January, 23, Time::new(0, 0)),
                     PointInTime::new(2024, Month::January, 24, Time::new(0, 0)),
                 ),
+                vec!["my-tag-1".into(), "my-tag-2".into()]
             )).to_string(),
             r#"
             {
@@ -89,6 +94,10 @@ mod serialization_tests
                         "year": 2024
                     }
                 },
+                "tag_names": [
+                    "my-tag-1",
+                    "my-tag-2"
+                ],
                 "title": "My-title"
             }
             "#.replace(" ", "").replace("\n", "")
@@ -108,7 +117,8 @@ mod serialization_tests
                         PointInTime::new(2024, Month::January, 24, Time::new(0, 0)),
                     )
                 ),
-                vec![]
+                vec![],
+                vec!["my-tag-1".into(), "my-tag-2".into()]
             )).to_string(),
             r#"
             {
@@ -135,6 +145,10 @@ mod serialization_tests
                     "tag": "InPeriodOfTime"
                 },
                 "query_modifiers": [],
+                "tag_names": [
+                    "my-tag-1",
+                    "my-tag-2"
+                ],
                 "title": "My-title"
             }
             "#.replace(" ", "").replace("\n", "")
