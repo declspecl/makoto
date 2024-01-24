@@ -26,7 +26,7 @@ impl Default for MakotoState
                 window_properties: WindowProperties::default(),
                 makoto_properties: MakotoProperties {}
             },
-            data: MakotoData {}
+            data: MakotoData::default()
         };
     }
 }

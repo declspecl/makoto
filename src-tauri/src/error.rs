@@ -17,6 +17,14 @@ fn serialize_serde_yaml_error<S>(error: &serde_yaml::Error, serializer: S) -> Re
     return serializer.serialize_str(&error.to_string());
 }
 
+/// utility function to provide serialization for serde_json::Error.
+/// this function just serializes the error by calling `error.to_string()`
+fn serialize_serde_json_error<S>(error: &serde_json::Error, serializer: S) -> Result<S::Ok, S::Error>
+    where S: serde::Serializer
+{
+    return serializer.serialize_str(&error.to_string());
+}
+
 /// enum that wraps all the possible errros that may occur in the makoto backend
 #[derive(thiserror::Error, Debug, Serialize)]
 #[serde(tag = "tag", content = "error")]
@@ -31,28 +39,12 @@ pub enum MakotoError
 
     #[error("Underlying serde_yaml error: \"{0}\"")]
     #[serde(serialize_with = "serialize_serde_yaml_error")]
-    SerdeYamlError(#[from] serde_yaml::Error)
+    SerdeYamlError(#[from] serde_yaml::Error),
+
+    #[error("Underlying serde_json error: \"{0}\"")]
+    #[serde(serialize_with = "serialize_serde_json_error")]
+    SerdeJsonError(#[from] serde_json::Error)
 }
 
 /// wrapper result type that uses `MakotoError` as the error type
 pub type MakotoResult<T> = Result<T, MakotoError>;
-
-#[cfg(test)]
-mod tests
-{
-    use super::*;
-
-    use std::io::{Error, ErrorKind};
-
-    #[test]
-    fn test_makoto_io_error_message()
-    {
-        let io_error: Error = Error::new(ErrorKind::Other, "My IO error!");
-        let makoto_error: MakotoError = MakotoError::IOError(io_error);
-
-        assert_eq!(
-            makoto_error.to_string(),
-            r#"Underlying IOError of type "other error": "My IO error!""#
-        )
-    }
-}
