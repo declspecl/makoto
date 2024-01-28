@@ -20,51 +20,50 @@ export type MakotoStateActionType = {
 export function makotoStateReducer(state: MakotoState | null, action: MakotoStateActionType): MakotoState | null {
     switch (action.type) {
         case "addTag": {
-            if (state) {
-                const newTags: Map<string, Tag> = state.data.tags;
-                newTags.set(action.tag.name, action.tag);
+            if (!state) throw new Error("`state` is null and cannot be used to add a tag to");
 
-                return {
-                    config: state.config,
-                    data: {
-                        ...state.data,
-                        tags: newTags
-                    }
-                };
-            }
-            else throw new Error("`state` is null and cannot be used to add a tag to");
+            if (state.data.tag_pool.find(tag => tag.name === action.tag.name)) throw new Error(`Tag ${action.tag.name} already exists`);
+
+            return {
+                config: state.config,
+                data: {
+                    ...state.data,
+                    tag_pool: [
+                        ...state.data.tag_pool,
+                        action.tag
+                    ]
+                }
+            };
         }
 
         case "addRawPartition": {
-            if (state) {
-                return {
-                    config: state.config,
-                    data: {
-                        ...state.data,
-                        raw_partitions: [
-                            ...state.data.raw_partitions,
-                            action.rawPartition
-                        ]
-                    }
-                };
-            }
-            else throw new Error("`state` is null and cannot be used to add a raw partition to");
+            if (!state) throw new Error("`state` is null and cannot be used to add a raw partition to");
+
+            return {
+                config: state.config,
+                data: {
+                    ...state.data,
+                    raw_partitions: [
+                        ...state.data.raw_partitions,
+                        action.rawPartition
+                    ]
+                }
+            };
         }
 
         case "addPartitionRule": {
-            if (state) {
-                return {
-                    config: state.config,
-                    data: {
-                        ...state.data,
-                        partition_rules: [
-                            ...state.data.partition_rules,
-                            action.partitionRule
-                        ]
-                    }
-                };
-            }
-            else throw new Error("`state` is null and cannot be used to add a partition rule to");
+            if (!state) throw new Error("`state` is null and cannot be used to add a partition rule to");
+
+            return {
+                config: state.config,
+                data: {
+                    ...state.data,
+                    partition_rules: [
+                        ...state.data.partition_rules,
+                        action.partitionRule
+                    ]
+                }
+            };
         }
 
         case "override": {

@@ -1,25 +1,11 @@
-import { useEffect, useMemo } from "react";
-import { useMakotoStateContext, useMakotoStateDispatchContext } from "./contexts/MakotoStateContext";
-import { Button } from "./components/ui/Button";
+import { useEffect } from "react";
 import { Tag } from "./backend/tag";
-import { hexColorToRgbColor, rgbColorToHexColor } from "./backend/utils";
+import { Button } from "./components/ui/Button";
+import { useMakotoStateContext, useMakotoStateDispatchContext } from "./contexts/MakotoStateContext";
 
 export default function App() {
     const makotoState = useMakotoStateContext();
     const dispatch = useMakotoStateDispatchContext();
-
-    const tags: Tag[] = useMemo(
-        () => {
-            const tempTags: Tag[] = [];
-
-            makotoState.data.tags.forEach((tag) => {
-                tempTags.push(tag);
-            })
-
-            return tempTags;
-        },
-        [makotoState]
-    );
 
     useEffect(() => {
         console.log(makotoState);
@@ -31,19 +17,20 @@ export default function App() {
                 let newTag: Tag = {
                     name: "test title",
                     description: "test desc",
-                    color: { r: 205, g: 10, b: 0 }
+                    color: "#ffffff"
                 };
 
+                // TODO: add error boundary so that adding duplicate tags doesnt kaboom the UI
                 dispatch({ type: "addTag", tag: newTag });
             }}>
                 add tag
             </Button>
-
-            {tags.map((tag) => (
-                <div>
-                    <p>{tag.name}</p>
+            
+            {makotoState.data.tag_pool.map((tag) => (
+                <div key={tag.name}>
+                    <h6>{tag.name}</h6>
                     <p>{tag.description}</p>
-                    <p>{rgbColorToHexColor(tag.color)}</p>
+                    <p>{tag.color}</p>
                 </div>
             ))}
         </div>

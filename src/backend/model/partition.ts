@@ -6,7 +6,7 @@ export interface RawPartition {
     title: string,
     description: string,
     period_of_time: PeriodOfTime,
-    tag_names: Tag[]
+    tag_names: string[]
 }
 
 export interface PartitionRule {
@@ -14,5 +14,5 @@ export interface PartitionRule {
     description: string,
     query: ActivationQuery,
     query_modifiers: ActivationModifier[],
-    tag_names: Tag[]
+    tag_names: string[]
 }
