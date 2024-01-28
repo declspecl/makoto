@@ -2,9 +2,14 @@ import { MakotoData } from "./data";
 import { MakotoState } from "./state";
 import { MakotoConfig } from "./config";
 import { invoke } from "@tauri-apps/api";
+import { Tag } from "./tag";
 
-export function get_state(): Promise<MakotoState> {
-    return invoke<MakotoState>("get_state");
+export async function get_state(): Promise<MakotoState> {
+    const state = await invoke<MakotoState>("get_state");
+
+    state.data.tags = new Map(Object.entries(state.data.tags));
+
+    return state;
 }
 
 export function update_state_config(new_config: MakotoConfig): Promise<void> {
@@ -12,6 +17,12 @@ export function update_state_config(new_config: MakotoConfig): Promise<void> {
 }
 
 export function update_state_data(new_data: MakotoData): Promise<void> {
+    const newTags: Record<string, Tag> = {};
+
+    // new_data.tags.forEach((tag, name) => {
+    //     newTags[name] = tag;
+    // })
+
     return invoke("update_state_data", { new_data });
 }
 

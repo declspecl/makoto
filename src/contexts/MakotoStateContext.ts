@@ -21,14 +21,14 @@ export function makotoStateReducer(state: MakotoState | null, action: MakotoStat
     switch (action.type) {
         case "addTag": {
             if (state) {
+                const newTags: Map<string, Tag> = state.data.tags;
+                newTags.set(action.tag.name, action.tag);
+
                 return {
                     config: state.config,
                     data: {
                         ...state.data,
-                        tags: {
-                            ...state.data.tags,
-                            [action.tag.name]: action.tag
-                        }
+                        tags: newTags
                     }
                 };
             }

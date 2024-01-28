@@ -6,7 +6,7 @@ interface MakotoStateLoaderProps {
     children: React.ReactNode
 }
 
-export function MakotoStateLoader({ children }: MakotoStateLoaderProps) {
+export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
     const [makotoState, dispatch] = useReducer(makotoStateReducer, null);
 
     useEffect(() => {
@@ -15,9 +15,8 @@ export function MakotoStateLoader({ children }: MakotoStateLoaderProps) {
         async function initializeMakotoState() {
             const state = await get_state();
 
-            if (!isCancelled) {
+            if (!isCancelled)
                 dispatch({ type: "override", state: state });
-            }
         }
 
         initializeMakotoState();

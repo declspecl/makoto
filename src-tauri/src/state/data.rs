@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
+use std::{fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
 
 use serde::{Serialize, Deserialize};
 
@@ -12,7 +12,7 @@ pub struct MakotoData
 {
     pub raw_partitions: Vec<RawPartition>,
     pub partition_rules: Vec<PartitionRule>,
-    pub tags: HashMap<String, Tag>,
+    pub tag_pool: Vec<Tag>,
 
     /// phantom attribute being stored in `MakotoData` for easy access and because its idiomatic
     /// buffer containing any errors that happened in the startup of the program
@@ -29,7 +29,7 @@ impl Default for MakotoData
         {
             raw_partitions: Vec::new(),
             partition_rules: Vec::new(),
-            tags: HashMap::new(),
+            tag_pool: Vec::new(),
             startup_error_log: Vec::new()
         };
     }
@@ -100,5 +100,28 @@ impl MakotoData
         data_file.write_all(serialized_makoto_data.as_bytes())?;
 
         return Ok(());
+    }
+}
+
+#[cfg(test)]
+mod serialization_tests
+{
+    use serde_json::json;
+
+    use super::*;
+
+    #[test]
+    fn makoto_data()
+    {
+        assert_eq!(
+            json!(MakotoData::default()).to_string(),
+            r#"
+            {
+                "partition_rules": [],
+                "raw_partitions": [],
+                "tag_pool": []
+            }
+            "#.replace(" ", "").replace("\n", "")
+        );
     }
 }

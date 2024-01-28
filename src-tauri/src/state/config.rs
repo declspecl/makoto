@@ -150,3 +150,28 @@ impl MakotoConfig
         return Ok(());
     }
 }
+
+#[cfg(test)]
+mod serialization_tests
+{
+    use super::*;
+
+    #[test]
+    fn makoto_config()
+    {
+        assert_eq!(
+            serde_yaml::to_string(&MakotoConfig::default()).unwrap(),
+            r#"window_properties:
+                initial_inner_size: null
+                minimum_inner_size: null
+                maximum_inner_size: null
+                initial_position: null
+                maximized: false
+                fullscreen: false
+                centered: false
+                title: makoto
+            makoto_properties: {}
+            "#.replace("            ", "").replace("                ", "  ")
+        );
+    }
+}

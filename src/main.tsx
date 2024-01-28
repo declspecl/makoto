@@ -4,14 +4,14 @@ import App from "./App";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ErrorLogContext } from "./contexts/ErrorLog";
-import { MakotoStateLoader } from "./components/MakotoStateLoader";
+import { MakotoStateProvider } from "./components/MakotoStateProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <ErrorLogContext.Provider value={[]}>
-            <MakotoStateLoader>
+            <MakotoStateProvider>
                 <App />
-            </MakotoStateLoader>
+            </MakotoStateProvider>
         </ErrorLogContext.Provider>
     </React.StrictMode>
 );
