@@ -171,7 +171,7 @@ mod serialization_tests
                 centered: false
                 title: makoto
             makoto_properties: {}
-            "#.replace("            ", "").replace("                ", "  ")
+            "#.replace("                ", "  ").replace("            ", "")
         );
     }
 }
