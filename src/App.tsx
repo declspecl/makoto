@@ -20,13 +20,16 @@ export default function App() {
                     color: "#ffffff"
                 };
 
-                // TODO: add error boundary so that adding duplicate tags doesnt kaboom the UI
                 dispatch({ type: "addTag", tag: newTag });
+
+                if (makotoState.error) {
+                    console.error(makotoState.error);
+                }
             }}>
                 add tag
             </Button>
             
-            {makotoState.data.tag_pool.map((tag) => (
+            {makotoState.state?.data.tag_pool.map((tag) => (
                 <div key={tag.name}>
                     <h6>{tag.name}</h6>
                     <p>{tag.description}</p>

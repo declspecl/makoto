@@ -11,14 +11,14 @@ pub struct RawPartition
     pub title: String,
     pub description: String,
     pub period_of_time: PeriodOfTime,
-    pub tag_names: Vec<String>
+    pub tag_indices: Vec<u64>
 }
 
 impl RawPartition
 {
-    pub fn new(title: String, description: String, period_of_time: PeriodOfTime, tag_names: Vec<String>) -> Self
+    pub fn new(title: String, description: String, period_of_time: PeriodOfTime, tag_indices: Vec<u64>) -> Self
     {
-        return Self { title, description, period_of_time, tag_names };
+        return Self { title, description, period_of_time, tag_indices };
     }
 }
 
@@ -33,14 +33,14 @@ pub struct PartitionRule
     pub description: String,
     pub query: ActivationQuery,
     pub query_modifiers: Vec<ActivationModifier>,
-    pub tag_names: Vec<String>
+    pub tag_indices: Vec<u64>
 }
 
 impl PartitionRule
 {
-    pub fn new(title: String, description: String, query: ActivationQuery, query_modifiers: Vec<ActivationModifier>, tag_names: Vec<String>) -> Self
+    pub fn new(title: String, description: String, query: ActivationQuery, query_modifiers: Vec<ActivationModifier>, tag_indices: Vec<u64>) -> Self
     {
-        return Self { title, description, query, query_modifiers, tag_names };
+        return Self { title, description, query, query_modifiers, tag_indices };
     }
 }
 
@@ -69,7 +69,7 @@ mod serialization_tests
                     PointInTime::new(2024, Month::January, 23, Time::new(0, 0)),
                     PointInTime::new(2024, Month::January, 24, Time::new(0, 0)),
                 ),
-                vec!["my-tag-1".into(), "my-tag-2".into()]
+                vec![0, 2, 4, 9]
             )).to_string(),
             r#"
             {
@@ -94,10 +94,7 @@ mod serialization_tests
                         "year": 2024
                     }
                 },
-                "tag_names": [
-                    "my-tag-1",
-                    "my-tag-2"
-                ],
+                "tag_indices": [0, 2, 4, 9],
                 "title": "My-title"
             }
             "#.replace(" ", "").replace("\n", "")
@@ -118,7 +115,7 @@ mod serialization_tests
                     )
                 ),
                 vec![],
-                vec!["my-tag-1".into(), "my-tag-2".into()]
+                vec![1, 3, 5]
             )).to_string(),
             r#"
             {
@@ -145,10 +142,7 @@ mod serialization_tests
                     "tag": "InPeriodOfTime"
                 },
                 "query_modifiers": [],
-                "tag_names": [
-                    "my-tag-1",
-                    "my-tag-2"
-                ],
+                "tag_indices": [1, 3, 5].
                 "title": "My-title"
             }
             "#.replace(" ", "").replace("\n", "")

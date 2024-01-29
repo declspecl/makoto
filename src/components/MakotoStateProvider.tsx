@@ -7,7 +7,7 @@ interface MakotoStateLoaderProps {
 }
 
 export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
-    const [makotoState, dispatch] = useReducer(makotoStateReducer, null);
+    const [errorfulMakotoState, dispatch] = useReducer(makotoStateReducer, { state: null, error: null });
 
     useEffect(() => {
         let isCancelled = false;
@@ -28,8 +28,8 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
 
     return (
         <>
-            {makotoState ? (
-                <MakotoStateContext.Provider value={makotoState}>
+            {errorfulMakotoState ? (
+                <MakotoStateContext.Provider value={errorfulMakotoState}>
                     <MakotoStateDispatchContext.Provider value={dispatch}>
                         {children}
                     </MakotoStateDispatchContext.Provider>

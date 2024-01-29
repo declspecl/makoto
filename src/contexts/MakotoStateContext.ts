@@ -17,62 +17,91 @@ export type MakotoStateActionType = {
     state: MakotoState
 };
 
-export function makotoStateReducer(state: MakotoState | null, action: MakotoStateActionType): MakotoState | null {
+export interface ErrorfulMakotoState {
+    state: MakotoState | null,
+    error: Error | null
+}
+
+export function makotoStateReducer(state: ErrorfulMakotoState | null, action: MakotoStateActionType): ErrorfulMakotoState {
     switch (action.type) {
         case "addTag": {
-            if (!state) throw new Error("`state` is null and cannot be used to add a tag to");
+            if (!state || !state.state) return {
+                state: null,
+                error: new Error("`state` is null and cannot be used to add a tag to")
+            };
 
-            if (state.data.tag_pool.find(tag => tag.name === action.tag.name)) throw new Error(`Tag ${action.tag.name} already exists`);
+            if (state.state.data.tag_pool.find(tag => tag.name === action.tag.name)) return {
+                state: state.state,
+                error: new Error(`Tag ${action.tag.name} already exists`)
+            };
 
             return {
-                config: state.config,
-                data: {
-                    ...state.data,
-                    tag_pool: [
-                        ...state.data.tag_pool,
-                        action.tag
-                    ]
-                }
+                state: {
+                    config: state.state.config,
+                    data: {
+                        ...state.state.data,
+                        tag_pool: [
+                            ...state.state.data.tag_pool,
+                            action.tag
+                        ]
+                    }
+                },
+                error: null
             };
         }
 
         case "addRawPartition": {
-            if (!state) throw new Error("`state` is null and cannot be used to add a raw partition to");
+            if (!state || !state.state) return {
+                state: null,
+                error: new Error("`state` is null and cannot be used to add a raw partition to")
+            };
 
             return {
-                config: state.config,
-                data: {
-                    ...state.data,
-                    raw_partitions: [
-                        ...state.data.raw_partitions,
-                        action.rawPartition
-                    ]
-                }
+                state: {
+                    config: state.state.config,
+                    data: {
+                        ...state.state.data,
+                        raw_partitions: [
+                            ...state.state.data.raw_partitions,
+                            action.rawPartition
+                        ]
+                    }
+                },
+                error: null
             };
         }
 
         case "addPartitionRule": {
-            if (!state) throw new Error("`state` is null and cannot be used to add a partition rule to");
+            if (!state || !state.state) return {
+                state: null,
+                error: new Error("`state` is null and cannot be be used to add a partition rule to")
+            };
 
             return {
-                config: state.config,
-                data: {
-                    ...state.data,
-                    partition_rules: [
-                        ...state.data.partition_rules,
-                        action.partitionRule
-                    ]
-                }
+                state: {
+                    config: state.state.config,
+                    data: {
+                        ...state.state.data,
+                        partition_rules: [
+                            ...state.state.data.partition_rules,
+                            action.partitionRule
+                        ]
+                    }
+                },
+                error: null
             };
         }
 
         case "override": {
-            return action.state;
+            return {
+                state: action.state,
+                error: null
+            };
         }
     }
 }
 
-export const MakotoStateContext = createContext<MakotoState | null>(null);
+export const MakotoStateContext = createContext<ErrorfulMakotoState | null>(null);
 export const MakotoStateDispatchContext = createContext<React.Dispatch<MakotoStateActionType> | null>(null);
 
 export function useMakotoStateContext() {
