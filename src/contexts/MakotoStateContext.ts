@@ -22,10 +22,10 @@ export interface ErrorfulMakotoState {
     error: Error | null
 }
 
-export function makotoStateReducer(state: ErrorfulMakotoState | null, action: MakotoStateActionType): ErrorfulMakotoState {
+export function makotoStateReducer(state: ErrorfulMakotoState, action: MakotoStateActionType): ErrorfulMakotoState {
     switch (action.type) {
         case "addTag": {
-            if (!state || !state.state) return {
+            if (!state.state) return {
                 state: null,
                 error: new Error("`state` is null and cannot be used to add a tag to")
             };
@@ -51,7 +51,7 @@ export function makotoStateReducer(state: ErrorfulMakotoState | null, action: Ma
         }
 
         case "addRawPartition": {
-            if (!state || !state.state) return {
+            if (!state.state) return {
                 state: null,
                 error: new Error("`state` is null and cannot be used to add a raw partition to")
             };
@@ -72,7 +72,7 @@ export function makotoStateReducer(state: ErrorfulMakotoState | null, action: Ma
         }
 
         case "addPartitionRule": {
-            if (!state || !state.state) return {
+            if (!state.state) return {
                 state: null,
                 error: new Error("`state` is null and cannot be be used to add a partition rule to")
             };
@@ -101,8 +101,8 @@ export function makotoStateReducer(state: ErrorfulMakotoState | null, action: Ma
     }
 }
 
-export const MakotoStateContext = createContext<ErrorfulMakotoState | null>(null);
-export const MakotoStateDispatchContext = createContext<React.Dispatch<MakotoStateActionType> | null>(null);
+export const MakotoStateContext = createContext<ErrorfulMakotoState>({ state: null, error: null });
+export const MakotoStateDispatchContext = createContext<React.Dispatch<MakotoStateActionType>>(undefined!);
 
 export function useMakotoStateContext() {
     const makotoState = useContext(MakotoStateContext);
