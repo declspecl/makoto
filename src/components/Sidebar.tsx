@@ -34,9 +34,9 @@ export function Sidebar({}: SidebarProps) {
                     <h1>Calendars</h1>
 
                     <ul>
-                        <li>Work</li>
-                        <li>Hobbies</li>
-                        <li>P5R</li>
+                        <li>Lorem</li>
+                        <li>Ipsum</li>
+                        <li>Dot</li>
                     </ul>
                 </TabsContent>
             </Tabs>

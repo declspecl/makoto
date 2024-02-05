@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { get_state } from "@/backend/commands";
+import { get_state } from "@/backend/model/commands";
 import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@/contexts/MakotoStateContext";
 
 interface MakotoStateLoaderProps {
