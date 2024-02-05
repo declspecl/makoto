@@ -17,6 +17,7 @@ const config: Config = {
             "container-sm": "calc(var(--container-radius) - 4px)"
         },
         colors: {
+            black: "hsl(0, 0%, 0%)",
             background: {
                 DEFAULT: "hsl(var(--background))",
                 foreground: "hsl(var(--background-foreground))",
