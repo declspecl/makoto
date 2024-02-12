@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-use super::day_time::{DaysOfWeek, DaysOfMonth, PeriodOfTime};
+use super::day_time::{DaysOfWeek, DaysOfMonth};
 
 /// enum for `ActivationModifier`s to identify it as either an `AND` or `OR` condition modifier
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -15,7 +15,6 @@ pub enum ActivationOperator
 #[serde(tag = "tag")]
 pub enum ActivationQuery
 {
-    InPeriodOfTime(PeriodOfTime),
     OnDaysOfWeek(DaysOfWeek),
     OnDaysOfMonth(DaysOfMonth),
 }
@@ -45,7 +44,7 @@ impl ActivationModifier
 mod serialization_tests
 {
     use super::*;
-    use crate::model::day_time::{DayOfWeek, DaysOfMonth, DaysOfWeek, Month, PointInTime, Time};
+    use crate::model::day_time::{DayOfWeek, DaysOfMonth, DaysOfWeek};
 
     use serde_json::json;
 
@@ -61,43 +60,6 @@ mod serialization_tests
         assert_eq!(
             json!(ActivationOperator::OR),
             r#"OR"#
-        );
-    }
-
-    /// ensures correct json serialization of the `ActivationQuery` enum with the variant `ActivationQuery::InTimeRange`
-    #[test]
-    fn activation_query()
-    {
-        assert_eq!(
-            json!(ActivationQuery::InPeriodOfTime(
-                PeriodOfTime::new(
-                    PointInTime::new(2024, Month::January, 23, Time::new(0, 0)),
-                    PointInTime::new(2024, Month::January, 23, Time::new(23, 59)),
-                )
-            )).to_string(),
-            r#"
-            {
-                "end": {
-                    "day_of_month": 23,
-                    "month": "January",
-                    "time": {
-                        "hour": 23,
-                        "minute": 59
-                    },
-                    "year": 2024
-                },
-                "start": {
-                    "day_of_month": 23,
-                    "month": "January",
-                    "time": {
-                        "hour": 0,
-                        "minute": 0
-                    },
-                    "year": 2024
-                },
-                "tag": "InPeriodOfTime"
-            }
-            "#.replace(" ", "").replace("\n", "")
         );
     }
 

@@ -53,7 +53,7 @@ impl PartitionRule
 mod serialization_tests
 {
     use super::*;
-    use crate::model::day_time::{Month, PointInTime, Time};
+    use crate::model::day_time::{Month, PointInTime, Time, DaysOfWeek, DayOfWeek};
 
     use serde_json::json;
 
@@ -108,12 +108,7 @@ mod serialization_tests
             json!(PartitionRule::new(
                 "My-title".into(), // avoiding spaces due to replace(" ", "")
                 "My-description".into(), // avoiding spaces due to replace(" ", "")
-                ActivationQuery::InPeriodOfTime(
-                    PeriodOfTime::new(
-                        PointInTime::new(2024, Month::January, 23, Time::new(0, 0)),
-                        PointInTime::new(2024, Month::January, 24, Time::new(0, 0)),
-                    )
-                ),
+                ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![DayOfWeek::Monday, DayOfWeek::Thursday])),
                 vec![],
                 vec![1, 3, 5]
             )).to_string(),
@@ -121,28 +116,14 @@ mod serialization_tests
             {
                 "description": "My-description",
                 "query": {
-                    "end": {
-                        "day_of_month": 24,
-                        "month": "January",
-                        "time": {
-                            "hour": 0,
-                            "minute": 0
-                        },
-                        "year": 2024
-                    },
-                    "start": {
-                        "day_of_month": 23,
-                        "month": "January",
-                        "time": {
-                            "hour": 0,
-                            "minute": 0
-                        },
-                        "year": 2024
-                    },
-                    "tag": "InPeriodOfTime"
+                    "days": [
+                        "Monday",
+                        "Thursday"
+                    ],
+                    "tag": "OnDaysOfWeek"
                 },
                 "query_modifiers": [],
-                "tag_indices": [1, 3, 5].
+                "tag_indices": [1, 3, 5],
                 "title": "My-title"
             }
             "#.replace(" ", "").replace("\n", "")
