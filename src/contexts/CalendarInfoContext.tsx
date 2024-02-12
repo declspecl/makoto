@@ -1,15 +1,7 @@
-import { CalendarInfo, CalendarViewMode } from "@/backend/calendarInfo";
-import { getMonthFromMonthNumber } from "@/backend/utils";
+import { CalendarInfo } from "@/backend/calendarInfo";
 import { createContext, useContext } from "react";
 
-const today = new Date();
-
-export const CalendarInfoContext = createContext<CalendarInfo>({
-    year: today.getFullYear(),
-    month: getMonthFromMonthNumber(today.getMonth() + 1),
-    dayOfMonth: today.getDay(),
-    viewMode: CalendarViewMode.Monthly
-});
+export const CalendarInfoContext = createContext<CalendarInfo>(null!);
 
 export const CalendarInfoDispatchContext = createContext<React.Dispatch<CalendarInfo>>(undefined!);
 
