@@ -3,7 +3,7 @@ use std::{fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
 use serde::{Serialize, Deserialize};
 
 use super::tag::Tag;
-use crate::{error::{MakotoError, MakotoResult}, model::partition::{PartitionRule, RawPartition}};
+use crate::{error::{MakotoError, MakotoResult}, model::{partition::{PartitionRule, RawPartition}, day_time::{PeriodOfTime, Time, PointInTime, Month, DaysOfWeek, DayOfWeek, DaysOfMonth}, activation::ActivationQuery}};
 
 /// serializable struct that represents the user data i.e. partitions, partition rules, etc.
 /// holds all partitions and all created partition tags
@@ -27,8 +27,33 @@ impl Default for MakotoData
     {
         return Self
         {
-            raw_partitions: Vec::new(),
-            partition_rules: Vec::new(),
+            raw_partitions: vec![
+                RawPartition::new(
+                    "my raw partition".into(),
+                    "my description".into(),
+                    PeriodOfTime::new(
+                        PointInTime::new(2024, Month::February, 12, Time::new(0, 0)),
+                        PointInTime::new(2024, Month::February, 12, Time::new(23, 59)),
+                    ),
+                    vec![]
+                )
+            ],
+            partition_rules: vec![
+                PartitionRule::new(
+                    "my days of week partition rule".into(),
+                    "my days of week description".into(),
+                    ActivationQuery::OnDaysOfWeek(DaysOfWeek::new(vec![DayOfWeek::Monday, DayOfWeek::Thursday])),
+                    vec![],
+                    vec![]
+                ),
+                PartitionRule::new(
+                    "my days of month partition rule".into(),
+                    "my days of month description".into(),
+                    ActivationQuery::OnDaysOfMonth(DaysOfMonth::new(vec![0, 12, 24])),
+                    vec![],
+                    vec![]
+                )
+            ],
             tag_pool: Vec::new(),
             startup_error_log: Vec::new()
         };
