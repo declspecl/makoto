@@ -1,6 +1,7 @@
-import { useMakotoStateContext } from "@/contexts/MakotoStateContext";
+import { ErrorfulMakotoState, useMakotoStateContext } from "@/contexts/MakotoStateContext";
 import { PartitionRule, RawPartition } from "./model/partition";
 import { DayOfWeek, Month, PeriodOfTime, PointInTime } from "./model/dayTime";
+import { MakotoState } from "./model/state";
 
 export function getMonthNumberFromMonth(month: Month): number {
     switch (month) {
@@ -54,59 +55,30 @@ export function getDateObjectFromPointInTime(pointInTime: PointInTime): Date {
     );
 }
 
-// export function checkPartitionRuleActivationQuery(pointInTime: PointInTime, activationQuery: ActivationQuery): boolean {
-//     switch (activationQuery.tag) {
-//         case "OnDaysOfWeek": {
-//             // TODO: implement a `getDayOfWeekFromDayOfMonth`, maybe from `PointInTime`
-//             pointInTime.time
-//             // approach:
-//             // 1. check if in activation query for each day
-//             // 2. create list of all days that are valid from a , and check if each day is in it
-//             break;
-//         }
-//         case "OnDaysOfMonth": {
-//             break;
-//         }
-//         case "InPeriodOfTime": {
-//             return isPointInTimeInPeriodOfTime(
-//                 pointInTime,
-//                 {
-//                     start: activationQuery.start,
-//                     end: activationQuery.end
-//                 }
-//             );
-//         }
-//     }
-// }
-
 export function isPartitionRuleActiveAtPointInTime(partition: PartitionRule, pointInTime: PointInTime): boolean {
     switch (partition.query.tag) {
         case "OnDaysOfMonth":
-            console.log("days of month");
             return partition.query.days.includes(pointInTime.day_of_month);
 
+        // converting to Date object to easily know the day of the week
         case "OnDaysOfWeek":
-            console.log("days of week");
-            const date = getDateObjectFromPointInTime(pointInTime);
-            const dayOfWeek = getDayOfWeekFromDayNumber(date.getDay() + 1);
+            const pointInTimeDate = getDateObjectFromPointInTime(pointInTime);
+            const pointInTimeDayOfWeek = getDayOfWeekFromDayNumber(pointInTimeDate.getDay() + 1);
 
-            return partition.query.days.includes(dayOfWeek);
+            return partition.query.days.includes(pointInTimeDayOfWeek);
     }
 }
 
-export function getApplicablePartitionsForPointInTime(pointInTime: PointInTime): (RawPartition | PartitionRule)[] {
-    const makotoState = useMakotoStateContext();
-    if (makotoState.state === null) return [];
-
+export function getApplicablePartitionsForPointInTime(makotoState: MakotoState, pointInTime: PointInTime): (RawPartition | PartitionRule)[] {
     const applicablePartitions: (RawPartition | PartitionRule)[] = [];
 
-    for (let rawPartition of makotoState.state.data.raw_partitions) {
+    for (let rawPartition of makotoState.data.raw_partitions) {
         if (isPointInTimeInPeriodOfTime(pointInTime, rawPartition.period_of_time)) {
             applicablePartitions.push(rawPartition);
         }
     }
 
-    for (let partitionRule of makotoState.state.data.partition_rules) {
+    for (let partitionRule of makotoState.data.partition_rules) {
         if (isPartitionRuleActiveAtPointInTime(partitionRule, pointInTime)) {
             applicablePartitions.push(partitionRule);
         }
