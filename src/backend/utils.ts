@@ -32,19 +32,43 @@ export function isPointInTimeInPeriodOfTime(time: PointInTime, periodOfTime: Per
     return true;
 }
 
-export function checkPartitionRuleActivationQuery(pointInTime: PointInTime, activationQuery: ActivationQuery): boolean {
-    switch (activationQuery.tag) {
-        case "OnDaysOfWeek": {
-            // return pointInTime.day_of_month
-            // TODO: implement a `getDayOfWeekFromDayOfMonth`, maybe from `PointInTime`
-            // TODO: i think it might be best to separate `PeriodOfTime` from `ActivationQuery` and add `active_period_of_time` as a member
-            break;
-        }
-        case "OnDaysOfMonth": {
-            break;
-        }
-        case "InPeriodOfTime": {
-            return isPointInTimeInPeriodOfTime(pointInTime, (activationQuery as PeriodOfTime));
+// export function checkPartitionRuleActivationQuery(pointInTime: PointInTime, activationQuery: ActivationQuery): boolean {
+//     switch (activationQuery.tag) {
+//         case "OnDaysOfWeek": {
+//             // TODO: implement a `getDayOfWeekFromDayOfMonth`, maybe from `PointInTime`
+//             pointInTime.time
+//             // approach:
+//             // 1. check if in activation query for each day
+//             // 2. create list of all days that are valid from a , and check if each day is in it
+//             break;
+//         }
+//         case "OnDaysOfMonth": {
+//             break;
+//         }
+//         case "InPeriodOfTime": {
+//             return isPointInTimeInPeriodOfTime(
+//                 pointInTime,
+//                 {
+//                     start: activationQuery.start,
+//                     end: activationQuery.end
+//                 }
+//             );
+//         }
+//     }
+// }
+
+export function isPartitionActiveInPeriodOfTime(partition: RawPartition | PartitionRule, pointInTime: PointInTime): boolean {
+    // raw partition
+    if ("period_of_time" in partition) {
+        return isPointInTimeInPeriodOfTime(pointInTime, partition.period_of_time);
+    }
+    else {
+        // partition rule
+        switch (partition.query.tag) {
+            case "OnDaysOfMonth":
+                break;
+            case "OnDaysOfWeek":
+                break;
         }
     }
 }

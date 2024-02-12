@@ -1,22 +1,17 @@
-import { PeriodOfTime } from "./dayTime";
+import { DaysOfMonth, DaysOfWeek } from "./dayTime";
 
 export type ActivationOperator = "AND" | "OR";
 
-interface InPeriodOfTimeActivationQuery extends PeriodOfTime {
-    tag: "InPeriodOfTime"
-}
-
-interface OnDaysOfWeekActivationQuery extends PeriodOfTime {
+interface OnDaysOfWeekActivationQuery extends DaysOfWeek {
     tag: "OnDaysOfWeek"
 }
 
-interface OnDaysOfMonthActivationQuery extends PeriodOfTime {
+interface OnDaysOfMonthActivationQuery extends DaysOfMonth {
     tag: "OnDaysOfMonth"
 }
 
-export type ActivationQuery = InPeriodOfTimeActivationQuery
-                            | OnDaysOfWeekActivationQuery
-                            | OnDaysOfMonthActivationQuery;
+export type ActivationQuery = | OnDaysOfWeekActivationQuery
+                              | OnDaysOfMonthActivationQuery;
 
 export interface ActivationModifier {
     query: ActivationQuery,
