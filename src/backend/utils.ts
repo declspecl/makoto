@@ -82,13 +82,15 @@ export function getDateObjectFromPointInTime(pointInTime: PointInTime): Date {
 export function isPartitionRuleActiveAtPointInTime(partition: PartitionRule, pointInTime: PointInTime): boolean {
     switch (partition.query.tag) {
         case "OnDaysOfMonth":
-            return pointInTime.day_of_month in partition.query.days;
+            console.log("days of month");
+            return partition.query.days.includes(pointInTime.day_of_month);
 
         case "OnDaysOfWeek":
+            console.log("days of week");
             const date = getDateObjectFromPointInTime(pointInTime);
             const dayOfWeek = getDayOfWeekFromDayNumber(date.getDay() + 1);
 
-            return dayOfWeek in partition.query.days;
+            return partition.query.days.includes(dayOfWeek);
     }
 }
 
