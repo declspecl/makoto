@@ -1,5 +1,5 @@
 import { getRange } from "../utils";
-import { getMonthNumberFromMonth } from "./conversions";
+import { getDayOfWeekFromDayNumber, getMonthNumberFromMonth } from "./conversions";
 import { PeriodOfTime, PointInTime } from "@/backend/model/dayTime";
 
 export function isPointInTimeInPeriodOfTime(pointInTime: PointInTime, periodOfTime: PeriodOfTime): boolean {
@@ -23,13 +23,14 @@ export function getDateObjectFromPointInTime(pointInTime: PointInTime): Date {
     );
 }
 
-export function getNumberOfDaysInMonth(year: number, month: number): number {
-    return (new Date(year, month, 0)).getDate();
+export function getNumberOfDaysInMonth(year: number, monthIndex: number): number {
+    // underflow the month AHEAD to fall back into CORRECT month at the final day
+    return (new Date(year, monthIndex + 1, 0)).getDate();
 }
 
-export function getLeadingDaysFromPrecedingMonth(year: number, month: number): number[] {
-    let leadingDaysForCurrentMonth: number = (new Date(year, month)).getDay() - 1;
-    let lastDayOfPrecedingMonth: number = (new Date(year, month - 1, 0)).getDate();
+export function getLeadingDaysFromPrecedingMonth(year: number, monthIndex: number): number[] {
+    let dayOfWeekNumber: number = (new Date(year, monthIndex)).getDay(); // 0-6
+    let lastDayOfPrecedingMonth: number = getNumberOfDaysInMonth(year, monthIndex - 1); // 1-31
 
-    return getRange(lastDayOfPrecedingMonth - leadingDaysForCurrentMonth + 1, lastDayOfPrecedingMonth);
+    return getRange(lastDayOfPrecedingMonth - dayOfWeekNumber + 1, lastDayOfPrecedingMonth);
 }

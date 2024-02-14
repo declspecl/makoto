@@ -12,5 +12,5 @@ export function cn(...inputs: ClassValue[]) {
  * @returns {number[]} The range of numbers spanning from `start` to `end`
  */
 export function getRange(start: number, end: number): number[] {
-    return Array.from(Array(1 + (end - start)).keys()).map(v => start + v);
+    return Array.from((new Array(1 + (end - start))).keys()).map(v => start + v);
 }

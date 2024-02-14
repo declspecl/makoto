@@ -2,53 +2,57 @@ import { useEffect, useMemo, useState } from "react";
 import { CalendarInfo, CalendarViewMode } from "@/backend/calendarInfo";
 import { getLeadingDaysFromPrecedingMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
-import { getRange } from "@/lib/utils";
+import { cn, getRange } from "@/lib/utils";
 
 
 export function Calendar() {
-    const today = new Date();
+    const today = new Date(2024, 5);
+    // const today = new Date();
 
     const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
         targetYear: today.getFullYear(),
-        targetMonth: today.getMonth() + 1,
+        targetMonthIndex: today.getMonth(),
         viewMode: CalendarViewMode.Monthly,
     });
 
+    useEffect(() => {
+        console.table(calendarInfo);
+    }, []);
+
     const daysOfMonth: number[] = useMemo(() => {
-        let daysOfMonth = getLeadingDaysFromPrecedingMonth(calendarInfo.targetYear, calendarInfo.targetMonth);
+        let dom = getLeadingDaysFromPrecedingMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
 
-        daysOfMonth.push(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonth)));
+        dom.push(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex)));
 
-        return daysOfMonth;
+        return dom;
     }, [calendarInfo]);
 
     useEffect(() => {
-        // console.log(today.getDate());
-
-        // console.table(calendarInfo);
-
         console.log(daysOfMonth);
-    }, []);
+    }, [daysOfMonth]);
 
     return (
         <div className="w-full h-full">
             <ResizablePanelGroup direction="horizontal" className="w-full h-full">
-                <ResizablePanel minSize={15} defaultSize={30}>
+                <ResizablePanel minSize={15} defaultSize={15}>
                     {/* <Sidebar /> */}
                 </ResizablePanel>
 
                 <ResizableHandle />
 
-                <ResizablePanel minSize={50} defaultSize={70}>
+                <ResizablePanel minSize={50} defaultSize={85}>
                     <div className="w-auto grid grid-cols-7 grid-flow-row">
-                        <div>1</div>
-                        <div>2</div>
-                        <div>3</div>
-                        <div>4</div>
-                        <div>5</div>
-                        <div>6</div>
-                        <div>7</div>
-                        <div>8</div>
+                        {daysOfMonth.map((day, i) => (
+                            <div
+                                key={`day-${day}@${i}`}
+                                className={cn(
+                                    "flex justify-center items-center",
+                                    { "text-background-foreground/35": (day > 6 && i < 6) }
+                                )}
+                            >
+                                {day}
+                            </div>
+                        ))}
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
