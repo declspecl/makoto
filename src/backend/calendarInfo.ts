@@ -1,5 +1,3 @@
-import { DayOfMonth, Month, Year } from "./model/dayTime";
-
 export enum CalendarViewMode {
     Weekly,
     Monthly,
@@ -7,8 +5,6 @@ export enum CalendarViewMode {
 }
 
 export interface CalendarInfo {
-    year: Year,
-    month: Month,
-    dayOfMonth: DayOfMonth,
+    today: Date,
     viewMode: CalendarViewMode
 }

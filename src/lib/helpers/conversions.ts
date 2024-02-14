@@ -1,4 +1,4 @@
-import { DayOfWeek, Month } from "../model/dayTime";
+import { DayOfWeek, Month } from "@/backend/model/dayTime";
 
 /**
  * Converts a `Month` into the numerical representation of the `Month` in the gregorian calendar, 1-12

@@ -1,19 +1,11 @@
 import { useEffect } from "react";
 import { useMakotoStateContext } from "./contexts/MakotoStateContext";
-import { getApplicablePartitionsForPointInTime } from "./backend/utils";
+import { getApplicablePartitionsForPointInTime } from "./lib/helpers/partition";
 import { PointInTime } from "./backend/model/dayTime";
-import { useCalendarInfoContext } from "./contexts/CalendarInfoContext";
+import { Calendar } from "./pages/Calendar";
 
 export default function App() {
     const makotoState = useMakotoStateContext();
-
-    const calendarInfo = useCalendarInfoContext();
-
-    useEffect(() => {
-        if (calendarInfo) {
-            console.log(calendarInfo);
-        }
-    }, [calendarInfo]);
 
     useEffect(() => {
         console.log(makotoState);
@@ -32,8 +24,7 @@ export default function App() {
 
     return (
         <div>
-
-            {/* <Calendar /> */}
+            <Calendar />
         </div>
     );
 }
