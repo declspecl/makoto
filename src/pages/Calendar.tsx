@@ -1,22 +1,33 @@
+import { useEffect, useMemo, useState } from "react";
 import { CalendarInfo, CalendarViewMode } from "@/backend/calendarInfo";
+import { getLeadingDaysFromPrecedingMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
-import { useEffect, useState } from "react";
-import { getNumberOfDaysInMonth } from "@/lib/helpers/timing";
+import { getRange } from "@/lib/utils";
 
-const today = new Date();
 
 export function Calendar() {
+    const today = new Date();
+
     const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
-        today: today,
+        targetYear: today.getFullYear(),
+        targetMonth: today.getMonth() + 1,
         viewMode: CalendarViewMode.Monthly,
     });
 
+    const daysOfMonth: number[] = useMemo(() => {
+        let daysOfMonth = getLeadingDaysFromPrecedingMonth(calendarInfo.targetYear, calendarInfo.targetMonth);
+
+        daysOfMonth.push(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonth)));
+
+        return daysOfMonth;
+    }, [calendarInfo]);
+
     useEffect(() => {
-        console.log(today.getDate());
+        // console.log(today.getDate());
 
-        console.table(calendarInfo);
+        // console.table(calendarInfo);
 
-        console.log(getNumberOfDaysInMonth(calendarInfo.today.getFullYear(), calendarInfo.today.getMonth()));
+        console.log(daysOfMonth);
     }, []);
 
     return (

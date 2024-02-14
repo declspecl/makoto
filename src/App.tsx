@@ -8,8 +8,6 @@ export default function App() {
     const makotoState = useMakotoStateContext();
 
     useEffect(() => {
-        console.log(makotoState);
-
         if (makotoState.state !== null) {
             const testPointInTime: PointInTime = {
                 year: 2024,
@@ -18,6 +16,7 @@ export default function App() {
                 time: { hour: 0, minute: 0}
             };
 
+            console.log("applicable partitions:")
             console.log(getApplicablePartitionsForPointInTime(makotoState.state, testPointInTime));
         }
     }, [makotoState]);

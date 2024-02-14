@@ -5,6 +5,7 @@ export enum CalendarViewMode {
 }
 
 export interface CalendarInfo {
-    today: Date,
+    targetMonth: number,
+    targetYear: number,
     viewMode: CalendarViewMode
 }
