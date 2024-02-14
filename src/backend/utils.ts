@@ -3,54 +3,6 @@ import { PartitionRule, RawPartition } from "./model/partition";
 import { DayOfWeek, Month, PeriodOfTime, PointInTime } from "./model/dayTime";
 import { MakotoState } from "./model/state";
 
-export function getMonthNumberFromMonth(month: Month): number {
-    switch (month) {
-        case "January": return 1;
-        case "February": return 2;
-        case "March": return 3;
-        case "April": return 4;
-        case "May": return 5;
-        case "June": return 6;
-        case "July": return 7;
-        case "August": return 8;
-        case "September": return 9;
-        case "October": return 10;
-        case "November": return 11;
-        case "December": return 12;
-        default: throw new Error("Invalid month value");
-    }
-}
-
-export function getMonthFromMonthNumber(month: number): Month {
-    switch (month) {
-        case 1: return "January";
-        case 2: return "February";
-        case 3: return "March";
-        case 4: return "April";
-        case 5: return "May";
-        case 6: return "June";
-        case 7: return "July";
-        case 8: return "August";
-        case 9: return "September";
-        case 10: return "October";
-        case 11: return "November";
-        case 12: return "December";
-        default: throw new Error("Invalid month number");
-    }
-}
-
-export function getDayOfWeekFromDayNumber(day: number): DayOfWeek {
-    switch (day) {
-        case 1: return "Sunday";
-        case 2: return "Monday";
-        case 3: return "Tuesday";
-        case 4: return "Wednesday";
-        case 5: return "Thursday";
-        case 6: return "Friday";
-        case 7: return "Saturday";
-        default: throw new Error("Invalid day value");
-    }
-}
 
 export function isPointInTimeInPeriodOfTime(pointInTime: PointInTime, periodOfTime: PeriodOfTime): boolean {
     if (pointInTime.year < periodOfTime.start.year || pointInTime.year > periodOfTime.end.year) return false;
@@ -103,4 +55,8 @@ export function getApplicablePartitionsForPointInTime(makotoState: MakotoState, 
     }
 
     return applicablePartitions;
+}
+
+export function getNumberOfDaysInMonth(year: number, month: number): number {
+    return (new Date(year, month, 0)).getDate();
 }
