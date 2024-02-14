@@ -22,7 +22,7 @@ export default function App() {
     }, [makotoState]);
 
     return (
-        <div>
+        <div className="w-full h-full">
             <Calendar />
         </div>
     );
