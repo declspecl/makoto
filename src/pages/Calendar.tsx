@@ -1,14 +1,13 @@
+import { getRange } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
+import { CalendarDay } from "@/components/CalendarDay";
 import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
 import { getLeadingDaysFromPrecedingMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
-import { cn, getRange } from "@/lib/utils";
-import { CalendarDay } from "@/components/CalendarDay";
 
 
 export function Calendar() {
-    const today = new Date(2024, 5);
-    // const today = new Date();
+    const today = new Date();
 
     const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
         targetYear: today.getFullYear(),
@@ -47,10 +46,9 @@ export function Calendar() {
                             <CalendarDay
                                 key={`day-${day}@${i}`}
                                 dayNumber={day}
-                                className={cn(
-                                    "flex justify-center items-center",
-                                    { "text-background-foreground/35" : (day > 6 && i < 6) }
-                                )}
+                                monthIndex={(day > 6 && i < 6) ? calendarInfo.targetMonthIndex - 1 : calendarInfo.targetMonthIndex}
+                                year={calendarInfo.targetYear}
+                                isPreceding={day > 6 && i < 6}
                             />
                         ))}
                     </div>
