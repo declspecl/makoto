@@ -6,8 +6,8 @@ import { getDateObjectFromPointInTime, isPointInTimeInPeriodOfTime } from "./tim
 
 export function isRawPartitionActiveOnDay(partition: RawPartition, year: number, monthIndex: number, dayOfMonth: number): boolean {
     if (year < partition.period_of_time.start.year || year > partition.period_of_time.end.year) return false;
-    if (monthIndex + 1 < getMonthIndexFromMonth(partition.period_of_time.start.month) ||
-        monthIndex + 1 > getMonthIndexFromMonth(partition.period_of_time.end.month)) return false;
+    if (monthIndex < getMonthIndexFromMonth(partition.period_of_time.start.month) ||
+        monthIndex > getMonthIndexFromMonth(partition.period_of_time.end.month)) return false;
     if (dayOfMonth < partition.period_of_time.start.day_of_month || dayOfMonth > partition.period_of_time.end.day_of_month) return false;
 
     return true;
