@@ -2,6 +2,11 @@ import { getRange } from "../utils";
 import { getMonthIndexFromMonth } from "./conversions";
 import { PeriodOfTime, PointInTime } from "@/backend/dayTime";
 
+/**
+ * @param {PointInTime} pointInTime The `PointInTime` that will be checked if it is in the given `PeriodOfTime`
+ * @param {PeriodOfTime} periodOfTime The `PeriodOfTime` that will be checked if it envelopes the given `PointInTime`
+ * @returns {boolean} Whether `pointInTime` is in `PeriodOfTime` or not
+ */
 export function isPointInTimeInPeriodOfTime(pointInTime: PointInTime, periodOfTime: PeriodOfTime): boolean {
     if (pointInTime.year < periodOfTime.start.year || pointInTime.year > periodOfTime.end.year) return false;
     if (getMonthIndexFromMonth(pointInTime.month) < getMonthIndexFromMonth(periodOfTime.start.month) ||

@@ -5,11 +5,10 @@ import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
 import { getLeadingDaysForMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
 
-
 export function Calendar() {
     const today = new Date();
 
-    const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
+    const [calendarInfo, _setCalendarInfo] = useState<CalendarInfo>({
         targetYear: today.getFullYear(),
         targetMonthIndex: today.getMonth(),
         viewMode: CalendarViewMode.Monthly,
@@ -42,13 +41,13 @@ export function Calendar() {
 
                 <ResizablePanel minSize={50} defaultSize={85} className="h-full">
                     <div className="w-auto h-full grid grid-cols-7 grid-flow-row">
-                        {daysOfMonth.map((day, i) => (
+                        {daysOfMonth.map((dayOfMonth, i) => (
                             <CalendarDay
-                                key={`day-${day}@${i}`}
-                                dayNumber={day}
-                                monthIndex={(day > 6 && i < 6) ? calendarInfo.targetMonthIndex - 1 : calendarInfo.targetMonthIndex}
+                                key={`dayOfMonth-${dayOfMonth}@${i}`}
                                 year={calendarInfo.targetYear}
-                                isPreceding={day > 6 && i < 6}
+                                monthIndex={(dayOfMonth > 6 && i < 6) ? calendarInfo.targetMonthIndex - 1 : calendarInfo.targetMonthIndex}
+                                dayOfMonth={dayOfMonth}
+                                isPreceding={dayOfMonth > 6 && i < 6}
                             />
                         ))}
                     </div>
