@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Calendar } from "./pages/Calendar";
-import { PointInTime } from "./backend/model/dayTime";
+import { PointInTime } from "./backend/dayTime";
 import { useMakotoStateContext } from "./contexts/MakotoStateContext";
 import { getApplicablePartitionsForPointInTime } from "./lib/helpers/partition";
 

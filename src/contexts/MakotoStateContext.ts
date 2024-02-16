@@ -1,7 +1,7 @@
-import { Tag } from "@/backend/model/tag";
-import { MakotoState } from "@/backend/model/state";
+import { Tag } from "@/backend/tag";
+import { MakotoState } from "@/backend/state";
 import { createContext, useContext } from "react";
-import { PartitionRule, RawPartition } from "@/backend/model/partition";
+import { PartitionRule, RawPartition } from "@/backend/partition";
 
 export type MakotoStateActionType = {
     type: "addTag",

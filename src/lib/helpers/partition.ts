@@ -1,13 +1,13 @@
-import { MakotoState } from "@/backend/model/state";
-import { DayOfWeek, PointInTime } from "@/backend/model/dayTime";
-import { getDayOfWeekFromDayNumber, getMonthNumberFromMonth } from "./conversions";
-import { PartitionRule, RawPartition } from "@/backend/model/partition";
+import { MakotoState } from "@/backend/state";
+import { DayOfWeek, PointInTime } from "@/backend/dayTime";
+import { getDayOfWeekFromDayNumber, getMonthIndexFromMonth } from "./conversions";
+import { PartitionRule, RawPartition } from "@/backend/partition";
 import { getDateObjectFromPointInTime, isPointInTimeInPeriodOfTime } from "./timing";
 
 export function isRawPartitionActiveOnDay(partition: RawPartition, year: number, monthIndex: number, dayOfMonth: number): boolean {
     if (year < partition.period_of_time.start.year || year > partition.period_of_time.end.year) return false;
-    if (monthIndex + 1 < getMonthNumberFromMonth(partition.period_of_time.start.month) ||
-        monthIndex + 1 > getMonthNumberFromMonth(partition.period_of_time.end.month)) return false;
+    if (monthIndex + 1 < getMonthIndexFromMonth(partition.period_of_time.start.month) ||
+        monthIndex + 1 > getMonthIndexFromMonth(partition.period_of_time.end.month)) return false;
     if (dayOfMonth < partition.period_of_time.start.day_of_month || dayOfMonth > partition.period_of_time.end.day_of_month) return false;
 
     return true;

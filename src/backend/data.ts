@@ -1,5 +1,5 @@
 import { Tag } from "./tag";
-import { PartitionRule, RawPartition } from "./model/partition";
+import { PartitionRule, RawPartition } from "./partition";
 
 export interface MakotoData {
     raw_partitions: RawPartition[],

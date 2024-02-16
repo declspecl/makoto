@@ -1,47 +1,47 @@
-import { DayOfWeek, Month } from "@/backend/model/dayTime";
+import { DayOfWeek, Month } from "@/backend/dayTime";
 
 /**
- * Converts a `Month` into the numerical representation of the `Month` in the gregorian calendar, 1-12
+ * Converts a `Month` into the index of the numerical representation of the `Month` in the gregorian calendar, 0-11
  * @param {Month} month The `Month` to be converted into a number. ex. "January", "February", etc
- * @returns {number} The numerical representation 1-12 of the `Month`
+ * @returns {number} The numerical index 0-11 of the `Month`
  */
-export function getMonthNumberFromMonth(month: Month): number {
+export function getMonthIndexFromMonth(month: Month): number {
     switch (month) {
-        case "January": return 1;
-        case "February": return 2;
-        case "March": return 3;
-        case "April": return 4;
-        case "May": return 5;
-        case "June": return 6;
-        case "July": return 7;
-        case "August": return 8;
-        case "September": return 9;
-        case "October": return 10;
-        case "November": return 11;
-        case "December": return 12;
+        case "January": return 0;
+        case "February": return 1;
+        case "March": return 2;
+        case "April": return 3;
+        case "May": return 4;
+        case "June": return 5;
+        case "July": return 6;
+        case "August": return 7;
+        case "September": return 8;
+        case "October": return 9;
+        case "November": return 10;
+        case "December": return 11;
         default: throw new Error("Invalid month value");
     }
 }
 
 /**
- * Converts the numerical representation of a `Month` 1-12 into a `Month`
- * @param {number} month The number representing the `Month`
+ * Converts the numerical representation index of a `Month` 0-11 into a `Month`
+ * @param {number} month The index representing the `Month` 0-11
  * @returns {Month} The corresponding `Month`, ex. "January", "February", etc
  */
-export function getMonthFromMonthNumber(month: number): Month {
+export function getMonthFromMonthIndex(month: number): Month {
     switch (month) {
-        case 1: return "January";
-        case 2: return "February";
-        case 3: return "March";
-        case 4: return "April";
-        case 5: return "May";
-        case 6: return "June";
-        case 7: return "July";
-        case 8: return "August";
-        case 9: return "September";
-        case 10: return "October";
-        case 11: return "November";
-        case 12: return "December";
+        case 0: return "January";
+        case 1: return "February";
+        case 2: return "March";
+        case 3: return "April";
+        case 4: return "May";
+        case 5: return "June";
+        case 6: return "July";
+        case 7: return "August";
+        case 8: return "September";
+        case 9: return "October";
+        case 10: return "November";
+        case 11: return "December";
         default: throw new Error("Invalid month number");
     }
 }
