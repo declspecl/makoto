@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useMakotoStateContext } from "@/contexts/MakotoStateContext";
-import { getApplicablePartitionsForDay } from "@/lib/helpers/partition";
+import { getAllActivePartitionsForDay } from "@/lib/helpers/partition";
 
 interface CalendarDayProps extends React.HTMLAttributes<HTMLDivElement> {
     dayNumber: number,
@@ -21,7 +21,7 @@ export function CalendarDay({ dayNumber, monthIndex, year, isPreceding, classNam
         return <p>loading...</p>;
     }
 
-    const applicablePartitions = getApplicablePartitionsForDay(makotoState, year, monthIndex, dayNumber);
+    const applicablePartitions = getAllActivePartitionsForDay(makotoState, year, monthIndex, dayNumber);
 
     return (
         <button

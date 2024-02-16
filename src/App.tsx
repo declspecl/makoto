@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { Calendar } from "./pages/Calendar";
 import { PointInTime } from "./backend/dayTime";
 import { useMakotoStateContext } from "./contexts/MakotoStateContext";
-import { getApplicablePartitionsForPointInTime } from "./lib/helpers/partition";
+import { getAllActivePartitionsAtPointInTime } from "./lib/helpers/partition";
 
 export default function App() {
-    const { state: makotoState, error } = useMakotoStateContext();
+    const { state: makotoState, error: _error } = useMakotoStateContext();
 
     useEffect(() => {
         if (makotoState) {
@@ -17,7 +17,7 @@ export default function App() {
             };
 
             console.log("applicable partitions:")
-            console.log(getApplicablePartitionsForPointInTime(makotoState, testPointInTime));
+            console.log(getAllActivePartitionsAtPointInTime(makotoState, testPointInTime));
 
             console.log("all raw partitions:")
             console.log(makotoState.data.raw_partitions);

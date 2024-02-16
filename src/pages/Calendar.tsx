@@ -2,7 +2,7 @@ import { getRange } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
 import { CalendarDay } from "@/components/CalendarDay";
 import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
-import { getLeadingDaysFromPrecedingMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
+import { getLeadingDaysForMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
 
 
@@ -20,7 +20,7 @@ export function Calendar() {
     }, []);
 
     const daysOfMonth: number[] = useMemo(() => {
-        let dom = getLeadingDaysFromPrecedingMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
+        let dom = getLeadingDaysForMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
 
         dom.push(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex)));
 

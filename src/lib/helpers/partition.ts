@@ -41,7 +41,7 @@ export function isPartitionRuleActiveOnDay(partition: PartitionRule, year: numbe
     }
 }
 
-export function getApplicablePartitionsForPointInTime(makotoState: MakotoState, pointInTime: PointInTime): (RawPartition | PartitionRule)[] {
+export function getAllActivePartitionsAtPointInTime(makotoState: MakotoState, pointInTime: PointInTime): (RawPartition | PartitionRule)[] {
     const applicablePartitions: (RawPartition | PartitionRule)[] = [];
 
     for (let rawPartition of makotoState.data.raw_partitions) {
@@ -59,7 +59,7 @@ export function getApplicablePartitionsForPointInTime(makotoState: MakotoState, 
     return applicablePartitions;
 }
 
-export function getApplicablePartitionsForDay(makotoState: MakotoState, year: number, monthIndex: number, dayOfMonth: number): (RawPartition | PartitionRule)[] {
+export function getAllActivePartitionsForDay(makotoState: MakotoState, year: number, monthIndex: number, dayOfMonth: number): (RawPartition | PartitionRule)[] {
     const applicablePartitions: (RawPartition | PartitionRule)[] = [];
 
     for (let rawPartition of makotoState.data.raw_partitions) {

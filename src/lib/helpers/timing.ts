@@ -28,7 +28,7 @@ export function getNumberOfDaysInMonth(year: number, monthIndex: number): number
     return (new Date(year, monthIndex + 1, 0)).getDate();
 }
 
-export function getLeadingDaysFromPrecedingMonth(year: number, monthIndex: number): number[] {
+export function getLeadingDaysForMonth(year: number, monthIndex: number): number[] {
     let dayOfWeekNumber: number = (new Date(year, monthIndex)).getDay(); // 0-6
     let lastDayOfPrecedingMonth: number = getNumberOfDaysInMonth(year, monthIndex - 1); // 1-31
 
