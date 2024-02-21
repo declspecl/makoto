@@ -1,7 +1,9 @@
 import React, { createContext, useContext } from "react";
 
-export const ErrorLogContext = createContext<string[]>([]);
-export const SetErrorLogContext = createContext<React.Dispatch<React.SetStateAction<string[]>>>(null!);
+export type SetErrorLogType = React.Dispatch<React.SetStateAction<string[]>>;
+
+export const ErrorLogContext = createContext<string[] | null>(null);
+export const SetErrorLogContext = createContext<SetErrorLogType | null>(null);
 
 export function useErrorLogContext(): string[] {
     const errorLog = useContext(ErrorLogContext);
@@ -13,7 +15,7 @@ export function useErrorLogContext(): string[] {
     return errorLog;
 }
 
-export function useSetErrorLogContext(): React.Dispatch<React.SetStateAction<string[]>> {
+export function useSetErrorLogContext(): SetErrorLogType {
     const setErrorLog = useContext(SetErrorLogContext);
 
     if (setErrorLog === null) {

@@ -1,5 +1,5 @@
 import { getRange } from "@/lib/utils";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { CalendarDay } from "@/components/CalendarDay";
 import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
 import { getLeadingDaysForMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
@@ -14,10 +14,6 @@ export function Calendar() {
         viewMode: CalendarViewMode.Monthly,
     });
 
-    useEffect(() => {
-        console.table(calendarInfo);
-    }, []);
-
     const daysOfMonth: number[] = useMemo(() => {
         let dom = getLeadingDaysForMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
 
@@ -25,10 +21,6 @@ export function Calendar() {
 
         return dom;
     }, [calendarInfo]);
-
-    useEffect(() => {
-        console.log(daysOfMonth);
-    }, [daysOfMonth]);
 
     return (
         <div className="w-full h-full">

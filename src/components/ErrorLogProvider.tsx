@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorLogContext, SetErrorLogContext } from "@/contexts/ErrorLog";
 
 interface ErrorLogProviderProps {
@@ -7,6 +7,11 @@ interface ErrorLogProviderProps {
 
 export function ErrorLogProvider({ children }: ErrorLogProviderProps) {
     const [errorLog, setErrorLog] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log("errorLog was updated. new value:");
+        console.log(errorLog);
+    }, [errorLog]);
 
     return (
         <ErrorLogContext.Provider value={errorLog}>

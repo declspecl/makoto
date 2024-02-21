@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from "react";
-import { get_state } from "@/backend/commands";
+import { useSetErrorLogContext } from "@/contexts/ErrorLog";
+import { try_deserialize_state_from_disk } from "@/backend/commands";
 import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@/contexts/MakotoStateContext";
 
 interface MakotoStateLoaderProps {
@@ -7,19 +8,18 @@ interface MakotoStateLoaderProps {
 }
 
 export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
-    const [errorfulMakotoState, dispatch] = useReducer(makotoStateReducer, { state: null, error: null });
+    const setErrorLog = useSetErrorLogContext();
+    const [errorfulMakotoState, dispatch] = useReducer(makotoStateReducer, null!);
 
     useEffect(() => {
         let isCancelled = false;
 
-        async function initializeMakotoState() {
-            const state = await get_state();
-
-            if (!isCancelled)
-                dispatch({ type: "override", state: state });
-        }
-
-        initializeMakotoState();
+        try_deserialize_state_from_disk()
+            .then((state) => {
+                if (!isCancelled)
+                    dispatch({ type: "override", state });
+            })
+            .catch((err) => setErrorLog(err));
 
         return () => {
             isCancelled = true;

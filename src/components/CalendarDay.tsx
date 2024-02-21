@@ -12,16 +12,9 @@ interface CalendarDayProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function CalendarDay({ year, monthIndex, dayOfMonth, isPreceding, className }: CalendarDayProps) {
-    const { state: makotoState, error } = useMakotoStateContext();
+    const state = useMakotoStateContext();
 
-    if (error) {
-        return <p>{JSON.stringify(error)}</p>;
-    }
-    if (!makotoState) {
-        return <p>loading...</p>;
-    }
-
-    const applicablePartitions = getAllActivePartitionsForDay(makotoState, {
+    const applicablePartitions = getAllActivePartitionsForDay(state, {
         year, monthIndex, dayOfMonth
     });
 

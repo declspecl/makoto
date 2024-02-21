@@ -3,15 +3,15 @@ import "./styles.css";
 import App from "./App";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ErrorLogContext } from "./contexts/ErrorLog";
+import { ErrorLogProvider } from "./components/ErrorLogProvider";
 import { MakotoStateProvider } from "./components/MakotoStateProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <ErrorLogContext.Provider value={[]}>
+        <ErrorLogProvider>
             <MakotoStateProvider>
                 <App />
             </MakotoStateProvider>
-        </ErrorLogContext.Provider>
+        </ErrorLogProvider>
     </React.StrictMode>
 );
