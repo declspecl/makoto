@@ -5,11 +5,10 @@ pub mod config;
 use data::MakotoData;
 use config::{MakotoConfig, WindowProperties, MakotoProperties};
 
-use serde::Serialize;
-use std::sync::{Arc, Mutex};
+use serde::{Serialize, Deserialize};
 
 /// serializable struct that represents the user configuration and the user data
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MakotoState
 {
     pub config: MakotoConfig,
@@ -31,8 +30,3 @@ impl Default for MakotoState
         };
     }
 }
-
-/// MakotoState needs to be serialized to disk, but can't (trivially) serialize Arc or Mutex, so
-/// instead Tauri will manage this wrapper and I will serialize the internal state to disk
-#[derive(Debug)]
-pub struct MakotoStateWrapper(pub Arc< Mutex<MakotoState> >);

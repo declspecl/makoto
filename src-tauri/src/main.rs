@@ -1,18 +1,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::sync::{Arc, Mutex};
-
-use state::{config::MakotoConfig, data::MakotoData, MakotoState};
-use error::{MakotoError, MakotoResult};
-
-use crate::state::MakotoStateWrapper;
+use state::{config::MakotoConfig, data::MakotoData};
+use error::{MakotoResult};
 
 pub mod model;
 pub mod state;
 pub mod error;
 pub mod commands;
 
-use commands::*;
+use commands::{try_deserialize_state_from_disk, try_serialize_state_to_disk};
 
 fn main() -> MakotoResult<()>
 {
@@ -20,7 +16,7 @@ fn main() -> MakotoResult<()>
 
     // if no errors occur, deserializes `MakotoData` from data.json
     // if errors do occur, is set to `MakotoData::default()` and adds the error to `data.startup_error_log`
-    let mut data: MakotoData = match tauri::api::path::app_data_dir(app_context.config())
+    let data: MakotoData = match tauri::api::path::app_data_dir(app_context.config())
     {
         Some(data_parent_dir) => {
             let data_file_path = data_parent_dir.join("data.json");
@@ -28,24 +24,10 @@ fn main() -> MakotoResult<()>
             match MakotoData::try_deserialize_from_data(&data_file_path)
             {
                 Ok(data) => data,
-                Err(err) => {
-                    let mut data = MakotoData::default();
-
-                    data.startup_error_log.push(err.to_string());
-
-                    data
-                }
+                Err(err) => MakotoData::default()
             }
         },
-        None => {
-            let err = MakotoError::FailedToGetPath("app data".into());
-
-            let mut data = MakotoData::default();
-
-            data.startup_error_log.push(err.to_string());
-
-            data
-        }
+        None => MakotoData::default()
     };
 
     // if no errors occur, deserializes `MakotoConfig` from config.json.
@@ -58,24 +40,10 @@ fn main() -> MakotoResult<()>
             match MakotoConfig::try_deserialize_from_config(&config_file_path)
             {
                 Ok(config) => config,
-                Err(err) => {
-                    let config = MakotoConfig::default();
-
-                    data.startup_error_log.push(err.to_string());
-
-                    config
-                }
+                Err(err) => MakotoConfig::default()
             }
         },
-        None => {
-            let err = MakotoError::FailedToGetPath("app config".into());
-
-            let config = MakotoConfig::default();
-
-            data.startup_error_log.push(err.to_string());
-
-            config
-        }
+        None => MakotoConfig::default()
     };
 
     // cloning before the `setup` closure so i can reference the window config when creating the main window
@@ -125,12 +93,9 @@ fn main() -> MakotoResult<()>
 
             return Ok(());
         })
-        .manage(MakotoStateWrapper(Arc::new(Mutex::new(MakotoState { config, data }))))
         .invoke_handler(tauri::generate_handler![
-            update_state_config,
-            update_state_data,
-            get_state,
-            get_startup_error_log
+            try_serialize_state_to_disk,
+            try_deserialize_state_from_disk
         ])
         .run(app_context)
         .expect("error while running tauri application");
