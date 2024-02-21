@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use state::{config::MakotoConfig, data::MakotoData};
-use error::{MakotoResult};
+use error::MakotoResult;
+use state::config::MakotoConfig;
 
 pub mod model;
 pub mod state;
@@ -14,24 +14,8 @@ fn main() -> MakotoResult<()>
 {
     let app_context = tauri::generate_context!();
 
-    // if no errors occur, deserializes `MakotoData` from data.json
-    // if errors do occur, is set to `MakotoData::default()` and adds the error to `data.startup_error_log`
-    let data: MakotoData = match tauri::api::path::app_data_dir(app_context.config())
-    {
-        Some(data_parent_dir) => {
-            let data_file_path = data_parent_dir.join("data.json");
-
-            match MakotoData::try_deserialize_from_data(&data_file_path)
-            {
-                Ok(data) => data,
-                Err(err) => MakotoData::default()
-            }
-        },
-        None => MakotoData::default()
-    };
-
     // if no errors occur, deserializes `MakotoConfig` from config.json.
-    // if errors do occur, is set to `MakotoConfig::default()` and adds the error to `data.startup_error_log`
+    // if errors do occur, sets it to `MakotoConfig::default`
     let config: MakotoConfig = match tauri::api::path::app_config_dir(app_context.config())
     {
         Some(config_parent_dir) => {
@@ -46,10 +30,8 @@ fn main() -> MakotoResult<()>
         None => MakotoConfig::default()
     };
 
-    // cloning before the `setup` closure so i can reference the window config when creating the main window
-    let window_properties = config.window_properties.clone();
-
-    // TODO: right now, the frontend won't know if there was an error while trying to deserialize the config or data
+    // quick alias for QoL
+    let window_properties = config.window_properties;
 
     tauri::Builder::default()
         .setup(move |app| -> Result<(), Box<dyn std::error::Error>> {
