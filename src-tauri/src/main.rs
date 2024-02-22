@@ -24,7 +24,7 @@ fn main() -> MakotoResult<()>
             match MakotoConfig::try_deserialize_from_config(&config_file_path)
             {
                 Ok(config) => config,
-                Err(err) => MakotoConfig::default()
+                Err(_) => MakotoConfig::default()
             }
         },
         None => MakotoConfig::default()

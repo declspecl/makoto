@@ -48,3 +48,20 @@ pub enum MakotoError
 
 /// wrapper result type that uses `MakotoError` as the error type
 pub type MakotoResult<T> = Result<T, MakotoError>;
+
+#[cfg(test)]
+mod serialization_tests
+{
+    use super::*;
+
+    use serde_json::json;
+
+    #[test]
+    fn makoto_error_failed_to_get_path()
+    {
+        assert_eq!(
+            json!(MakotoError::FailedToGetPath("app data".into())).to_string(),
+            r#"{"error":"app data","tag":"FailedToGetPath"}"#
+        );
+    }
+}
