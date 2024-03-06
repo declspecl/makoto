@@ -2,6 +2,7 @@ import { CalendarRangeIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs";
 import { Button } from "./ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
+import { Calendar } from "./ui/Calendar";
 
 export function PartitionBuilder() {
     return (
@@ -15,11 +16,14 @@ export function PartitionBuilder() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Add Raw Partition</CardTitle>
-                        <CardDescription>adds a</CardDescription>
+                        <CardDescription></CardDescription>
                     </CardHeader>
 
                     <CardContent>
-                        <CalendarRangeIcon />
+                        <Calendar
+                            mode="range"
+                            className="rounded-container-md border"
+                        />
                     </CardContent>
                 </Card>
             </TabsContent>

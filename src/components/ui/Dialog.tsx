@@ -48,7 +48,7 @@ export const DialogContent = React.forwardRef<
                     "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                     "disabled:pointer-events-none",
                     "data-[state=open]:bg-accent",
-                    "data-[state=open]:text-muted-foreground"
+                    "data-[state=open]:text-background-muted-foreground"
                 )}
             >
                 <XIcon className="h-4 w-4" />
@@ -104,7 +104,7 @@ export const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Description
         ref={ref}
-        className={cn("text-sm text-muted-foreground", className)}
+        className={cn("text-sm text-background-muted-foreground", className)}
         {...props}
     />
 ))
