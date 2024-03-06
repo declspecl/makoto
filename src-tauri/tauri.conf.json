@@ -12,9 +12,8 @@
     "tauri": {
         "allowlist": {
             "all": false,
-            "shell": {
-                "all": false,
-                "open": true
+            "window": {
+                "close": true
             }
         },
         "bundle": {

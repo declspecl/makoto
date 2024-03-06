@@ -3,7 +3,7 @@ use std::{fs::{self, OpenOptions}, io::{Read, Write}, path::Path};
 use serde::{Serialize, Deserialize};
 
 use super::tag::Tag;
-use crate::{error::{MakotoError, MakotoResult}, model::{partition::{PartitionRule, RawPartition}}};
+use crate::{error::{MakotoError, MakotoResult}, model::partition::{PartitionRule, RawPartition}};
 
 /// serializable struct that represents the user data i.e. partitions, partition rules, etc.
 /// holds all partitions and all created partition tags
@@ -81,7 +81,7 @@ impl MakotoData
             Self::set_up_data_file(&data_file_path)?;
         }
 
-        // open data file in write mode and create it if it doesn't exist
+        // open data file in write mode
         let mut data_file = OpenOptions::new()
             .write(true)
             .open(data_file_path)?;
