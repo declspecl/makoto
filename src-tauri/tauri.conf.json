@@ -13,7 +13,7 @@
         "allowlist": {
             "all": false,
             "window": {
-                "close": true
+                "all": true
             }
         },
         "bundle": {

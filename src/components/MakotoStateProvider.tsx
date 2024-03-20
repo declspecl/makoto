@@ -44,6 +44,8 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
                     try_serialize_state_to_disk(makotoState)
                         .then(() => {
                             alert("serialized without error!")
+
+                            e.preventDefault();
                         })
                         .catch((err) => {
                             // if an error prevents serializing to disk, log it and prevent window from closing
@@ -53,8 +55,12 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
                         });
                 });
 
-                if (serializationUnlistener.current)
+                console.log("added listener");
+
+                if (serializationUnlistener.current) {
                     serializationUnlistener.current();
+                    console.log("removed old listener")
+                }
 
                 serializationUnlistener.current = unlisten;
             }
