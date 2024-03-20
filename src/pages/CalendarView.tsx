@@ -5,7 +5,7 @@ import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
 import { getLeadingDaysForMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
 
-export function Calendar() {
+export function CalendarView() {
     const today = new Date();
 
     const [calendarInfo, _setCalendarInfo] = useState<CalendarInfo>({

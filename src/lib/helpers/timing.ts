@@ -1,6 +1,6 @@
 import { getRange } from "../utils";
 import { getMonthIndexFromMonth } from "./conversions";
-import { PeriodOfTime, PointInTime } from "@/backend/dayTime";
+import { PeriodOfTime, PointInTime, Time } from "@/backend/dayTime";
 
 /**
  * @param {PointInTime} pointInTime The `PointInTime` that will be checked if it is in the given `PeriodOfTime`
@@ -38,4 +38,23 @@ export function getLeadingDaysForMonth(year: number, monthIndex: number): number
     let lastDayOfPrecedingMonth: number = getNumberOfDaysInMonth(year, monthIndex - 1); // 1-31
 
     return getRange(lastDayOfPrecedingMonth - dayOfWeekNumber + 1, lastDayOfPrecedingMonth);
+}
+
+export function getTimeFromString(time: string): Time {
+    const [strHour, strMinute] = time.split(":")
+
+    try {
+        const hour = parseInt(strHour);
+        const minute = parseInt(strMinute);
+
+        return {
+            hour,
+            minute
+        };
+    }
+    catch (e) {
+        console.error(e);
+
+        throw e;
+    }
 }
