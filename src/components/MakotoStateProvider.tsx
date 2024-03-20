@@ -33,29 +33,41 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
     useEffect(() => {
         if (!makotoState) return;
 
-        // when the user tries to close the window
-        appWindow.onCloseRequested((e) => {
-            // try to serialize the current state to disk
-            try_serialize_state_to_disk(makotoState)
-                .catch((err) => {
-                    // if an error prevents serializing to disk, log it and prevent window from closing
-                    console.error(err);
+        let isCancelled = false;
 
-                    e.preventDefault();
+        async function setupListener() {
+            try {
+                const unlisten = await appWindow.onCloseRequested((e) => {
+                    if (isCancelled) return;
+
+                    // try to serialize the current state to disk
+                    try_serialize_state_to_disk(makotoState)
+                        .then(() => {
+                            alert("serialized without error!")
+                        })
+                        .catch((err) => {
+                            // if an error prevents serializing to disk, log it and prevent window from closing
+                            console.error(err);
+
+                            e.preventDefault();
+                        });
                 });
-        }).then((newUnlistener) => {
-            // remove the old listener if it exists
-            if (serializationUnlistener.current)
-                serializationUnlistener.current();
 
-            // after adding the listener, update the listener value
-            serializationUnlistener.current = newUnlistener;
-        }).catch((err) => {
-            // if an error prevents adding the listener, log it
-            console.error(err);
-        })
+                if (serializationUnlistener.current)
+                    serializationUnlistener.current();
+
+                serializationUnlistener.current = unlisten;
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+
+        setupListener();
         
         return () => {
+            isCancelled = true;
+
             // on unmount, remove the listener
             if (serializationUnlistener.current)
                 serializationUnlistener.current();

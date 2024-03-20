@@ -89,6 +89,8 @@ impl MakotoData
         // convert data object to yaml string
         let serialized_makoto_data = serde_json::to_string(self)?;
 
+        println!("{}", serialized_makoto_data);
+
         // write yaml string to data file
         data_file.write_all(serialized_makoto_data.as_bytes())?;
 
