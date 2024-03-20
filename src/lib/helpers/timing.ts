@@ -3,6 +3,7 @@ import { getMonthIndexFromMonth } from "./conversions";
 import { PeriodOfTime, PointInTime, Time } from "@/backend/dayTime";
 
 /**
+ * Checks whether a given `PointInTime` object is ***wholly*** contained inside a given `PeriodOfTime` object
  * @param {PointInTime} pointInTime The `PointInTime` that will be checked if it is in the given `PeriodOfTime`
  * @param {PeriodOfTime} periodOfTime The `PeriodOfTime` that will be checked if it envelopes the given `PointInTime`
  * @returns {boolean} Whether `pointInTime` is in `PeriodOfTime` or not
@@ -18,6 +19,11 @@ export function isPointInTimeInPeriodOfTime(pointInTime: PointInTime, periodOfTi
     return true;
 }
 
+/**
+ * Creates a new `Date` object that directly models a given `PoinInTIme`
+ * @param {PointInTime} pointInTime The `PointInTime` that will be represented by a new `Date` object
+ * @returns {Date} The representative `Date` object of the given `PointInTime`
+ */
 export function getDateObjectFromPointInTime(pointInTime: PointInTime): Date {
     return new Date(
         pointInTime.year,
@@ -28,11 +34,23 @@ export function getDateObjectFromPointInTime(pointInTime: PointInTime): Date {
     );
 }
 
+/**
+ * Retrieves the number of days in a given month (index) in a given year
+ * @param {number} year The year that the month is in
+ * @param {number} monthIndex The ***index*** of the month 0-11 inclusively to retrieve the number of days of
+ * @returns {number} The number of days in the supplied month in the supplied year
+ */
 export function getNumberOfDaysInMonth(year: number, monthIndex: number): number {
     // underflow the month AHEAD to fall back into CORRECT month at the final day
     return (new Date(year, monthIndex + 1, 0)).getDate();
 }
 
+/**
+ * Retrieves the days from the preceding month that lead up to the 1st of a given month. For example, if the 1st of May is a Thursday, and weeks start on Sunday, this function would return the numerical days for the previous month's Sunday, Monday, Tuesday, and Wednesday.
+ * @param {number} year The year that the month is in
+ * @param {number} monthIndex The ***index*** of the month 0-11 inclusively to retrieve the amount of leading days (that belong to the previous month)
+ * @returns {number[]} The list of the day numbers that belong to the previous month that lead up to the 1st of the supplied month
+ */
 export function getLeadingDaysForMonth(year: number, monthIndex: number): number[] {
     let dayOfWeekNumber: number = (new Date(year, monthIndex)).getDay(); // 0-6
     let lastDayOfPrecedingMonth: number = getNumberOfDaysInMonth(year, monthIndex - 1); // 1-31
@@ -40,6 +58,11 @@ export function getLeadingDaysForMonth(year: number, monthIndex: number): number
     return getRange(lastDayOfPrecedingMonth - dayOfWeekNumber + 1, lastDayOfPrecedingMonth);
 }
 
+/**
+ * Returns a `Time` object from a string in the format of hh:mm
+ * @param {string} time The time string in hh:mm format to be parsed into a `Time` object
+ * @returns {Time} The `Time` object that represents the supplied time string
+ */
 export function getTimeFromString(time: string): Time {
     const [strHour, strMinute] = time.split(":")
 
