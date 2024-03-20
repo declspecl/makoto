@@ -7,24 +7,15 @@ const config: Config = {
         "./src/**/*.{ts,tsx}"
     ],
     theme: {
-        borderRadius: {
-            "base-lg": "var(--base-radius)",
-            "base-md": "calc(var(--base-radius) - 2px)",
-            "base-sm": "calc(var(--base-radius) - 4px)",
-
-            "container-lg": "var(--container-radius)",
-            "container-md": "calc(var(--container-radius) - 2px)",
-            "container-sm": "calc(var(--container-radius) - 4px)"
-        },
         colors: {
             black: "hsl(0, 0%, 0%)",
             background: {
                 DEFAULT: "hsl(var(--background))",
                 foreground: "hsl(var(--background-foreground))",
-                muted: {
-                    DEFAULT: "hsl(var(--background-muted))",
-                    foreground: "hsl(var(--background-muted-foreground))"
-                }
+            },
+            muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))"
             },
             popover: {
                 DEFAULT: "hsl(var(--popover))",

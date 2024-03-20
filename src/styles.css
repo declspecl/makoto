@@ -62,8 +62,8 @@
 
         --background: 0 0% 100%;
         --background-foreground: 0 0% 6%;
-        --background-muted: 0 0% 91.6%;
-        --background-muted-foreground: 0 0% 45.1%;
+        --muted: 0 0% 91.6%;
+        --muted-foreground: 0 0% 45.1%;
 
         --popover: 0 0% 100%;
         --popover-foreground: 0 0% 9.9%;
@@ -82,8 +82,8 @@
 
         --background: 0 0% 6%;
         --background-foreground: 0 0% 98%;
-        --background-muted: 0 0% 17%;
-        --background-muted-foreground: 0 0% 63.9%;
+        --muted: 0 0% 17%;
+        --muted-foreground: 0 0% 63.9%;
 
         --popover: 0 0% 6%;
         --popover-foreground: 0 0% 98%;

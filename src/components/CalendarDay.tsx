@@ -21,8 +21,8 @@ export function CalendarDay({ year, monthIndex, dayOfMonth, isPreceding, classNa
     return (
         <button
             className={cn(
-                "bg-background-muted text-center transition-colors",
-                "hover:bg-background-muted/85",
+                "bg-muted text-center transition-colors",
+                "hover:bg-muted/85",
                 className
             )}
             onClick={() => {

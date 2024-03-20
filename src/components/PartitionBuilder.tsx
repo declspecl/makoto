@@ -3,8 +3,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs";
 import { Button } from "./ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
 import { Calendar } from "./ui/Calendar";
+import { useState } from "react";
+import { DateRange } from "react-day-picker";
 
 export function PartitionBuilder() {
+    const [rawPartitionDateRange, setRawPartitionDateRange] = useState<DateRange | undefined>();
+
     return (
         <Tabs defaultValue="raw" className="w-[420px]">
             <TabsList className="grid w-full grid-cols-2">
@@ -16,13 +20,15 @@ export function PartitionBuilder() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Add Raw Partition</CardTitle>
-                        <CardDescription></CardDescription>
+                        <CardDescription>Add a single-use partition for a fixed time range</CardDescription>
                     </CardHeader>
 
                     <CardContent>
                         <Calendar
                             mode="range"
-                            className="rounded-container-md border"
+                            selected={rawPartitionDateRange}
+                            onSelect={setRawPartitionDateRange}
+                            className="rounded-md border"
                         />
                     </CardContent>
                 </Card>
