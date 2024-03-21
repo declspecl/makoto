@@ -10,7 +10,16 @@ interface PreciseDay {
     dayOfMonth: number
 }
 
+/**
+ * Checks if a given `RawPartition` object is active at ***ANY*** point during the given `PreciseDay` object
+ * @param {RawPartition} partition The `RawPartition` object that will be checked if it is active during the given day
+ * @param {PreciseDay} exactDay The `PreciseDay` object that will be checked in
+ * @returns {boolean} A boolean value representing whether the `RawPartition` is active in the `PreciseDay` or not
+ */
 export function isRawPartitionActiveOnDay(partition: RawPartition, exactDay: PreciseDay): boolean {
+    // TODO: this may be problematic. see timing.ts:14 and the trello ticket for more info
+    // this also might not be implemented correctly 💀
+
     if (exactDay.year < partition.period_of_time.start.year || exactDay.year > partition.period_of_time.end.year) return false;
     if (exactDay.monthIndex < getMonthIndexFromMonth(partition.period_of_time.start.month) ||
         exactDay.monthIndex > getMonthIndexFromMonth(partition.period_of_time.end.month)) return false;
@@ -19,6 +28,12 @@ export function isRawPartitionActiveOnDay(partition: RawPartition, exactDay: Pre
     return true;
 }
 
+/**
+ * Checks if a given `PartitionRule` object is active at some point during the given `PointInTime` object
+ * @param {PartitionRule} partition The `PartitionRule` object that will be checked if it is active during the given point in time
+ * @param {PointInTime} pointInTime The `PointInTime` object that will be checked in
+ * @returns {boolean} A boolean value representing whether the `PartitionRule` is active in the `PointInTime` or not
+ */
 export function isPartitionRuleActiveAtPointInTime(partition: PartitionRule, pointInTime: PointInTime): boolean {
     switch (partition.query.tag) {
         case "OnDaysOfMonth":
@@ -33,6 +48,12 @@ export function isPartitionRuleActiveAtPointInTime(partition: PartitionRule, poi
     }
 }
 
+/**
+ * Checks if a given `PartitionRule` object is active at ***ANY*** point during the `PreciseDay` object
+ * @param {PartitionRule} partition The `PartitionRule` object that will be checked if it is active during the given day
+ * @param {PreciseDay} exactDay The `PreciseDay` object that will be checked in
+ * @returns {boolean} A boolean value representing whether the `PartitionRule` is active at any point during the `PreciseDay` object or not
+ */
 export function isPartitionRuleActiveOnDay(partition: PartitionRule, exactDay: PreciseDay): boolean {
     switch (partition.query.tag) {
         case "OnDaysOfMonth":
@@ -47,6 +68,12 @@ export function isPartitionRuleActiveOnDay(partition: PartitionRule, exactDay: P
     }
 }
 
+/**
+ * Receieves all of the `RawPartition` and `PartitionRule` objects that are active on a given `PointInTime` object
+ * @param {MakotoState} makotoState The `MakotoState` object that contains the partitions
+ * @param {PointInTime} pointInTime The `PointInTime` object that will be checked in
+ * @returns {(RawPartition | PartitionRule)[]} A list of `RawPartition` and `PartitionRule` objects that are active during the given `PointInTime` object
+ */
 export function getAllActivePartitionsAtPointInTime(makotoState: MakotoState, pointInTime: PointInTime): (RawPartition | PartitionRule)[] {
     const applicablePartitions: (RawPartition | PartitionRule)[] = [];
 
@@ -65,6 +92,12 @@ export function getAllActivePartitionsAtPointInTime(makotoState: MakotoState, po
     return applicablePartitions;
 }
 
+/**
+ * Receieves all of the `RawPartition` and `PartitionRule` objects that are active on a given `PreciseDay` object
+ * @param {MakotoState} makotoState The `MakotoState` object that contains the partitions
+ * @param {PreciseDay} exactDay The `PreciseDay` object that will be checked in
+ * @returns {(RawPartition | PartitionRule)[]} A list of `RawPartition` and `PartitionRule` objects that are active during the given `PreciseDay` object
+ */
 export function getAllActivePartitionsForDay(makotoState: MakotoState, exactDay: PreciseDay): (RawPartition | PartitionRule)[] {
     const applicablePartitions: (RawPartition | PartitionRule)[] = [];
 
