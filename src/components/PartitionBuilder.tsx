@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./ui/Input";
 import { Button } from "./ui/Button";
 import { Calendar } from "./ui/Calendar";
@@ -21,6 +21,7 @@ export function PartitionBuilder() {
     const [rawPartitionEndTime, setRawPartitionEndTime] = useState<string>("23:59");
     const [rawPartitionTitle, setRawPartitionTitle] = useState<string | undefined>();
     const [rawPartitionDescription, setRawPartitionDescription] = useState<string | undefined>();
+    const [isRawPartitionJustCreated, setIsRawPartitionJustCreated] = useState<boolean>(false);
 
     return (
         <Tabs defaultValue="raw" className="w-[420px]">
@@ -81,6 +82,8 @@ export function PartitionBuilder() {
                                 rawPartition,
                                 setErrorLog
                             });
+
+                            setIsRawPartitionJustCreated(true);
                         }}>
                             <div>
                                 <label htmlFor="partitionTitleInput">Title <span className="text-primary-200">*</span></label>
@@ -91,7 +94,7 @@ export function PartitionBuilder() {
 
                             <div>
                                 <label htmlFor="partitionDescriptionInput">Description <span className="text-primary-200">*</span></label>
-                                <Input required id="partitionDescriptionInput" type="text" placeholder="My Raw Partition Description" value={rawPartitionDescription} onChange={(e) => setRawPartitionDescription(e.target.value)} />
+                                <Input required id="partitionDescriptionInput" type="text" placeholder="My raw partition description" value={rawPartitionDescription} onChange={(e) => setRawPartitionDescription(e.target.value)} />
                             </div>
 
                             <div className="h-4" />
@@ -109,23 +112,35 @@ export function PartitionBuilder() {
 
                                     <div>
                                         <label htmlFor="startTimeInput">Start Time (hh:mm) <span className="text-primary-200">*</span></label>
-                                        <Input required id="startTimeInput" type="time" value={rawPartitionStartTime} onChange={(e) => setRawPartitionStartTime(e.target.value)} />
+                                        <Input
+                                            required
+                                            id="startTimeInput"
+                                            type="time"
+                                            value={rawPartitionStartTime}
+                                            onChange={(e) => setRawPartitionStartTime(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="h-2" />
 
                                     <div>
                                         <label htmlFor="endTimeInput">End Time (hh:mm) <span className="text-primary-200">*</span></label>
-                                        <Input required id="endTimeInput" type="time" value={rawPartitionEndTime} onChange={(e) => setRawPartitionEndTime(e.target.value)} />
+                                        <Input
+                                            required
+                                            id="endTimeInput"
+                                            type="time"
+                                            value={rawPartitionEndTime}
+                                            onChange={(e) => setRawPartitionEndTime(e.target.value)}
+                                        />
                                     </div>
 
                                     <div className="h-4" />
 
-                                    <Button
-                                        type="submit"
-                                    >
-                                        Create Raw Partition
-                                    </Button>
+                                    <Button type="submit">Create Raw Partition</Button>
+
+                                    {isRawPartitionJustCreated && (
+                                        <p className="text-success">Raw partition successfully created!</p>
+                                    )}
                                 </div>
                             )}
                         </form>

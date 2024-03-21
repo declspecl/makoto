@@ -5,6 +5,7 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { try_deserialize_state_from_disk, try_serialize_state_to_disk } from "@/backend/commands";
 import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@/contexts/MakotoStateContext";
 import { UnlistenFn } from "@tauri-apps/api/event";
+import { confirm } from "@tauri-apps/api/dialog";
 
 interface MakotoStateLoaderProps {
     children: React.ReactNode
@@ -35,41 +36,31 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
 
         let isCancelled = false;
 
-        async function setupListener() {
-            try {
-                const unlisten = await appWindow.onCloseRequested((e) => {
-                    if (isCancelled) return;
+        appWindow.onCloseRequested((e) => {
+            if (isCancelled) return;
 
-                    // try to serialize the current state to disk
-                    try_serialize_state_to_disk(makotoState)
-                        .then(() => {
-                            alert("serialized without error!")
+            try_serialize_state_to_disk(makotoState)
+                .then(() => {
+                    console.log("serialized without error!");
+                })
+                .catch((err) => {
+                    console.error(err);
 
-                            e.preventDefault();
-                        })
-                        .catch((err) => {
-                            // if an error prevents serializing to disk, log it and prevent window from closing
-                            console.error(err);
+                    e.preventDefault();
 
-                            e.preventDefault();
-                        });
-                });
+                    // TODO: implement a confirm dialog if it fails
+                })
+        })
+        .then((unlisten) => {
+            console.log("added listener");
 
-                console.log("added listener");
-
-                if (serializationUnlistener.current) {
-                    serializationUnlistener.current();
-                    console.log("removed old listener")
-                }
-
-                serializationUnlistener.current = unlisten;
+            if (serializationUnlistener.current) {
+                serializationUnlistener.current();
+                console.log("removed old listener")
             }
-            catch (e) {
-                console.error(e);
-            }
-        }
 
-        setupListener();
+            serializationUnlistener.current = unlisten;
+        });
         
         return () => {
             isCancelled = true;
