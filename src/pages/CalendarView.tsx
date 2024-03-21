@@ -4,26 +4,30 @@ import { CalendarDay } from "@/components/CalendarDay";
 import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
 import { getLeadingDaysForMonth, getNumberOfDaysInMonth } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
+import { CalendarViewControls } from "@/components/CalendarViewControls";
 
 export function CalendarView() {
     const today = new Date();
 
-    const [calendarInfo, _setCalendarInfo] = useState<CalendarInfo>({
+    const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
         targetYear: today.getFullYear(),
         targetMonthIndex: today.getMonth(),
         viewMode: CalendarViewMode.Monthly,
     });
 
     const daysOfMonth: number[] = useMemo(() => {
-        let dom = getLeadingDaysForMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
+        let leadingDays = getLeadingDaysForMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
 
-        dom.push(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex)));
-
-        return dom;
+        return leadingDays.concat(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex)));
     }, [calendarInfo]);
 
     return (
         <div className="w-full h-full">
+            <CalendarViewControls
+                calendarInfo={calendarInfo}
+                setCalendarInfo={setCalendarInfo}
+            />
+
             <ResizablePanelGroup direction="horizontal" className="w-full h-full">
                 <ResizablePanel minSize={15} defaultSize={15} className="h-full">
                     {/* <Sidebar /> */}
