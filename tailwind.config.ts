@@ -1,13 +1,14 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-    // darkMode: "class",
+    darkMode: "selector",
     content: [
         "./index.html",
         "./src/**/*.{ts,tsx}"
     ],
     theme: {
         colors: {
+            white: "hsl(0, 0%, 100%)",
             black: "hsl(0, 0%, 0%)",
             background: {
                 DEFAULT: "hsl(var(--background))",
