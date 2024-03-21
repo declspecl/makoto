@@ -1,11 +1,10 @@
 import { Button } from "./ui/Button";
 import { MakotoError } from "@/backend/error";
 import { appWindow } from "@tauri-apps/api/window";
+import { UnlistenFn } from "@tauri-apps/api/event";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { try_deserialize_state_from_disk, try_serialize_state_to_disk } from "@/backend/commands";
 import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@/contexts/MakotoStateContext";
-import { UnlistenFn } from "@tauri-apps/api/event";
-import { confirm } from "@tauri-apps/api/dialog";
 
 interface MakotoStateLoaderProps {
     children: React.ReactNode
@@ -40,9 +39,6 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
             if (isCancelled) return;
 
             try_serialize_state_to_disk(makotoState)
-                .then(() => {
-                    console.log("serialized without error!");
-                })
                 .catch((err) => {
                     console.error(err);
 
@@ -52,12 +48,8 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
                 })
         })
         .then((unlisten) => {
-            console.log("added listener");
-
-            if (serializationUnlistener.current) {
+            if (serializationUnlistener.current)
                 serializationUnlistener.current();
-                console.log("removed old listener")
-            }
 
             serializationUnlistener.current = unlisten;
         });

@@ -2,9 +2,10 @@ import { MakotoState } from "@/backend/state";
 import { DayOfWeek, PointInTime } from "@/backend/dayTime";
 import { getDayOfWeekFromDayNumber, getMonthIndexFromMonth } from "./conversions";
 import { PartitionRule, RawPartition } from "@/backend/partition";
-import { getDateObjectFromPointInTime, isPointInTimeInPeriodOfTime } from "./timing";
+import { getDateObjectFromPointInTime, getNumberOfDaysInMonth, isPointInTimeInPeriodOfTime } from "./timing";
+import { getRange } from "../utils";
 
-interface PreciseDay {
+export interface PreciseDay {
     year: number,
     monthIndex: number,
     dayOfMonth: number
@@ -17,19 +18,56 @@ interface PreciseDay {
  * @returns {boolean} A boolean value representing whether the `RawPartition` is active in the `PreciseDay` or not
  */
 export function isRawPartitionActiveOnDay(partition: RawPartition, exactDay: PreciseDay): boolean {
-    // TODO: this may be problematic. see timing.ts:14 and the trello ticket for more info
-    // this also might not be implemented correctly 💀
-
+    // exactDay is well outside the bounds of the partition
     if (exactDay.year < partition.period_of_time.start.year || exactDay.year > partition.period_of_time.end.year) return false;
-    if (exactDay.monthIndex < getMonthIndexFromMonth(partition.period_of_time.start.month) ||
-        exactDay.monthIndex > getMonthIndexFromMonth(partition.period_of_time.end.month)) return false;
-    if (exactDay.dayOfMonth < partition.period_of_time.start.day_of_month || exactDay.dayOfMonth > partition.period_of_time.end.day_of_month) return false;
 
-    return true;
+    // exactDay is well within the bounds of the partition, no overlap
+    if (exactDay.year > partition.period_of_time.start.year && exactDay.year < partition.period_of_time.end.year) return true;
+
+    const getDaysPassedInYear = (day: PreciseDay) => {
+        let daysOfLeadingMonths: number = 0;
+
+        for (let monthIndex of getRange(0, day.monthIndex - 1)) {
+            daysOfLeadingMonths += getNumberOfDaysInMonth(day.year, monthIndex);
+        }
+
+        return daysOfLeadingMonths + day.dayOfMonth;
+    }
+
+    const daysPassedInExactDay = getDaysPassedInYear(exactDay);
+    const daysPassedInPeriodOfTimeStart = getDaysPassedInYear({
+        year: partition.period_of_time.start.year,
+        monthIndex: getMonthIndexFromMonth(partition.period_of_time.start.month),
+        dayOfMonth: partition.period_of_time.start.day_of_month
+    });
+    const daysPassedInPeriodOfTimeEnd = getDaysPassedInYear({
+        year: partition.period_of_time.end.year,
+        monthIndex: getMonthIndexFromMonth(partition.period_of_time.end.month),
+        dayOfMonth: partition.period_of_time.end.day_of_month
+    });
+
+    // DEBUG
+    // console.log(daysPassedInExactDay);
+    // console.log(daysPassedInPeriodOfTimeStart);
+    // console.log(daysPassedInPeriodOfTimeEnd);
+
+    // exactDay and the partition are both entirely in the same year
+    if (exactDay.year == partition.period_of_time.start.year && partition.period_of_time.start.year == partition.period_of_time.end.year)
+        return daysPassedInExactDay >= daysPassedInPeriodOfTimeStart && daysPassedInExactDay <= daysPassedInPeriodOfTimeEnd;
+
+    // exactDay and the partition start on the same year
+    if (exactDay.year == partition.period_of_time.start.year && partition.period_of_time.start.year < partition.period_of_time.end.year)
+        return daysPassedInExactDay >= daysPassedInPeriodOfTimeStart;
+
+    // exactDay and the partition end on the same year
+    if (exactDay.year == partition.period_of_time.end.year && partition.period_of_time.start.year < partition.period_of_time.end.year)
+        return daysPassedInExactDay <= daysPassedInPeriodOfTimeEnd;
+
+    return false;
 }
 
 /**
- * Checks if a given `PartitionRule` object is active at some point during the given `PointInTime` object
+ * Checks if a given `PartitionRule` object is active at ***ANY*** point during the given `PointInTime` object
  * @param {PartitionRule} partition The `PartitionRule` object that will be checked if it is active during the given point in time
  * @param {PointInTime} pointInTime The `PointInTime` object that will be checked in
  * @returns {boolean} A boolean value representing whether the `PartitionRule` is active in the `PointInTime` or not

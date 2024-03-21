@@ -46,11 +46,11 @@ export function isPointInTimeInPeriodOfTime(pointInTime: PointInTime, periodOfTi
         return pointInTimeMinutes >= periodOfTimeStartMinutes && pointInTimeMinutes <= periodOfTimeEndMinutes;
 
     // periodOfTime spans 2+ unique years, pointInTime is the first year
-    if (pointInTime.year == periodOfTime.start.year && pointInTime.year < periodOfTime.end.year)
+    if (pointInTime.year == periodOfTime.start.year && periodOfTime.start.year < periodOfTime.end.year)
         return pointInTimeMinutes >= periodOfTimeStartMinutes;
 
     // periodOfTime spans 2+ unique years, pointInTime is the last year
-    if (pointInTime.year == periodOfTime.end.year && pointInTime.year > periodOfTime.start.year)
+    if (pointInTime.year == periodOfTime.end.year && periodOfTime.start.year < periodOfTime.start.year)
         return pointInTimeMinutes <= periodOfTimeEndMinutes;
 
     return false;
