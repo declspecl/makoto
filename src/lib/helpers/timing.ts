@@ -9,30 +9,51 @@ import { PeriodOfTime, PointInTime, Time } from "@/backend/dayTime";
  * @returns {boolean} Whether `pointInTime` is in `PeriodOfTime` or not
  */
 export function isPointInTimeInPeriodOfTime(pointInTime: PointInTime, periodOfTime: PeriodOfTime): boolean {
+    // pointInTime is definitely outside of the periodOfTime by year
     if (pointInTime.year < periodOfTime.start.year || pointInTime.year > periodOfTime.end.year) return false;
 
-    // TODO: this is problematic. if the period of time is 2021-2023, we should only check the month, day, hour, and minute
-    // if the preceding value is exactly equal.
-    // example:
-    //  pointInTime is january 2022
-    //  periodOfTime spans from january 2021 to january 2023
-    // since pointInTime's year is in the bounds of periodOfTime without touching them, we dont need to check anything else
-    //
-    // example:
-    //  pointInTime is january 10th 2021 at 14:30
-    //  periodOfTime is from january 10th 2021 00:00 to january 11th 2023 at 23:59
-    // pointInTime is within the year bounds, but its touching, so lets check month
-    // pointInTime is within the month bounds, but its touching, so lets check day
-    // pointInTime is within the day bounds, but its touching, so lets check hour
-    // pointInTime is within hour bounds, without touching, so we can confirm its in the bounds
+    // periodOfTime covers 3+ unique years, pointInTime is in that range without touching ends
+    if (pointInTime.year > periodOfTime.start.year && pointInTime.year < periodOfTime.end.year) return true;
 
-    if (getMonthIndexFromMonth(pointInTime.month) < getMonthIndexFromMonth(periodOfTime.start.month) ||
-        getMonthIndexFromMonth(pointInTime.month) > getMonthIndexFromMonth(periodOfTime.end.month)) return false;
-    if (pointInTime.day_of_month < periodOfTime.start.day_of_month || pointInTime.day_of_month > periodOfTime.end.day_of_month) return false;
-    if (pointInTime.time.hour < periodOfTime.start.time.hour || pointInTime.time.hour > periodOfTime.end.time.hour) return false;
-    if (pointInTime.time.minute < periodOfTime.start.time.minute || pointInTime.time.minute > periodOfTime.end.time.minute) return false;
+    const getTotalMinutesOfPointInTime = (pit: PointInTime): number => {
+        const minutesInDay = 1440;
 
-    return true;
+        let leadingMonthMinutes = 0;
+
+        for (let monthIndex of getRange(0, getMonthIndexFromMonth(pit.month) - 1)) {
+            const numOfDaysInMonth = getNumberOfDaysInMonth(pit.year, monthIndex);
+
+            leadingMonthMinutes += numOfDaysInMonth * minutesInDay;
+        }
+
+        const leadingDayMinutes = ((pit.day_of_month - 1) * minutesInDay);
+        const leadingHourMinutes = pit.time.hour * 60;
+
+        return leadingMonthMinutes + leadingDayMinutes + leadingHourMinutes + pit.time.minute;
+    }
+
+    const pointInTimeMinutes = getTotalMinutesOfPointInTime(pointInTime);
+    const periodOfTimeStartMinutes = getTotalMinutesOfPointInTime(periodOfTime.start);
+    const periodOfTimeEndMinutes = getTotalMinutesOfPointInTime(periodOfTime.end);
+
+    // DEBUG
+    // console.log(pointInTimeMinutes);
+    // console.log(periodOfTimeStartMinutes);
+    // console.log(periodOfTimeEndMinutes);
+
+    // periodOfTime spans the same year and pointInTime is in that year
+    if (pointInTime.year == periodOfTime.start.year && periodOfTime.start.year == periodOfTime.end.year)
+        return pointInTimeMinutes >= periodOfTimeStartMinutes && pointInTimeMinutes <= periodOfTimeEndMinutes;
+
+    // periodOfTime spans 2+ unique years, pointInTime is the first year
+    if (pointInTime.year == periodOfTime.start.year && pointInTime.year < periodOfTime.end.year)
+        return pointInTimeMinutes >= periodOfTimeStartMinutes;
+
+    // periodOfTime spans 2+ unique years, pointInTime is the last year
+    if (pointInTime.year == periodOfTime.end.year && pointInTime.year > periodOfTime.start.year)
+        return pointInTimeMinutes <= periodOfTimeEndMinutes;
+
+    return false;
 }
 
 /**
