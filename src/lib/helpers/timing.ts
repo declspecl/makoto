@@ -118,3 +118,37 @@ export function getTimeFromString(time: string): Time {
         throw e;
     }
 }
+
+/**
+ * Gets the monthIndex and year that directly follows the given monthIndex and year
+ * @param {number} monthIndex The index of the month (0-11) that will be advanced
+ * @param {number} year The year in which the month lies in
+ * @returns {[number, number]} A tuple that represents `[newMonthIndex, newYear]` that is the following monthIndex and year of the supplied arguments
+ */
+export function getNextMonthIndexAndYear(monthIndex: number, year: number = 0): [number, number] {
+    monthIndex += 1;
+
+    if (monthIndex > 11) {
+        year += 1;
+        monthIndex = 0;
+    }
+
+    return [monthIndex, year];
+}
+
+/**
+ * Gets the monthIndex and year that directly precedes the given monthIndex and year
+ * @param {number} monthIndex The index of the month (0-11) that will be preceded
+ * @param {number} year The year in which the month lies in
+ * @returns {[number, number]} A tuple that represents `[newMonthIndex, newYear]` that is the preceding monthIndex and year of the supplied arguments
+ */
+export function getPreviousMonthIndexAndYear(monthIndex: number, year: number = 0): [number, number] {
+    monthIndex -= 1;
+
+    if (monthIndex < 0) {
+        year -= 1;
+        monthIndex = 11;
+    }
+
+    return [monthIndex, year];
+}
