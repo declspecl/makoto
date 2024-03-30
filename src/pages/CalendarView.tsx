@@ -1,10 +1,10 @@
 import { getRange } from "@/lib/utils";
 import { useMemo, useState } from "react";
-import { CalendarDay } from "@/components/CalendarDay";
+import { CalendarDay } from "@/components/Calendar/CalendarDay";
 import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
 import { getLeadingDaysForMonth, getNumberOfDaysInMonth, getPreviousMonthIndexAndYear } from "@/lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
-import { CalendarViewControls } from "@/components/CalendarViewControls";
+import { CalendarViewControls } from "@/components/Calendar/CalendarViewControls";
 
 export function CalendarView() {
     const today = new Date();
@@ -28,7 +28,7 @@ export function CalendarView() {
                     {/* <Sidebar /> */}
                 </ResizablePanel>
 
-                <ResizableHandle className="bg-primary hover:bg-primary-200 hover:w-0.5" />
+                <ResizableHandle className="bg-primary" />
 
                 <ResizablePanel minSize={50} defaultSize={75} className="h-full">
                     <div className="w-auto h-full flex flex-col gap-1">
@@ -44,6 +44,7 @@ export function CalendarView() {
                                     year={calendarInfo.targetYear}
                                     monthIndex={(dayOfMonth > 6 && i < 6) ? getPreviousMonthIndexAndYear(calendarInfo.targetMonthIndex, 0)[0] : calendarInfo.targetMonthIndex}
                                     dayOfMonth={dayOfMonth}
+                                    today={today}
                                     isPreceding={dayOfMonth > 6 && i < 6}
                                 />
                             ))}

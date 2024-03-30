@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "./ui/Input";
 import { Button } from "./ui/Button";
 import { Calendar } from "./ui/Calendar";
@@ -87,14 +87,14 @@ export function PartitionBuilder() {
                         }}>
                             <div>
                                 <label htmlFor="partitionTitleInput">Title <span className="text-primary-200">*</span></label>
-                                <Input required id="partitionTitleInput" type="text" placeholder="My Raw Partition Title" value={rawPartitionTitle} onChange={(e) => setRawPartitionTitle(e.target.value)} />
+                                <Input required id="partitionTitleInput" type="text" placeholder="Raw Partition Title" value={rawPartitionTitle} onChange={(e) => setRawPartitionTitle(e.target.value)} />
                             </div>
 
                             <div className="h-2" />
 
                             <div>
                                 <label htmlFor="partitionDescriptionInput">Description <span className="text-primary-200">*</span></label>
-                                <Input required id="partitionDescriptionInput" type="text" placeholder="My raw partition description" value={rawPartitionDescription} onChange={(e) => setRawPartitionDescription(e.target.value)} />
+                                <Input required id="partitionDescriptionInput" type="text" placeholder="Raw partition description" value={rawPartitionDescription} onChange={(e) => setRawPartitionDescription(e.target.value)} />
                             </div>
 
                             <div className="h-4" />
