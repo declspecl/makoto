@@ -84,7 +84,7 @@ impl MakotoConfig {
 			))?
 		)?;
 
-		let serialized_config = toml_edit::ser::to_string(&MakotoConfig::default())?;
+		let serialized_config = toml_edit::ser::to_string_pretty(&MakotoConfig::default())?;
 
 		return Ok(fs::write(
 			&config_file_path,
@@ -135,7 +135,7 @@ impl MakotoConfig {
 		let mut config_file = OpenOptions::new().write(true).open(config_file_path)?;
 
 		// convert config object to TOML string
-		let serialized_makoto_config = toml_edit::ser::to_string(self)?;
+		let serialized_makoto_config = toml_edit::ser::to_string_pretty(self)?;
 
 		// write TOML string to config file
 		config_file.write_all(serialized_makoto_config.as_bytes())?;
