@@ -25,6 +25,7 @@
         "paths": {
             "@/*": ["src/*"],
             "@lib/*": ["src/lib/*"],
+            "@views/*": ["src/views/*"],
             "@backend/*": ["src/backend/*"],
             "@context/*": ["src/context/*"],
             "@components/*": ["src/components/*"]

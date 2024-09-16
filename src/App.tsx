@@ -1,5 +1,5 @@
-import { PartitionBuilder } from "./components/PartitionBuilder";
-import { CalendarView } from "./views/CalendarView";
+import { CalendarView } from "@views/CalendarView";
+import { PartitionBuilder } from "@components/PartitionBuilder";
 
 export default function App() {
     return (

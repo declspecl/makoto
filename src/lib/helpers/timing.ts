@@ -1,4 +1,4 @@
-import { getRange } from "../utils";
+import { getRange } from "@lib/utils";
 import { getMonthIndexFromMonth } from "./conversions";
 import { PeriodOfTime, PointInTime, Time } from "@backend/dayTime";
 
