@@ -19,6 +19,10 @@ This design allows for users to organize their days however they wish without be
 - [x] Configuration through YAML file w/ automatic (de)serialization
 - [x] Toast notification error handling
 - [x] Custom or preset theming
-- [ ] Partition builder
-- [ ] Calendar view
-- [ ] Sidebar navigation
+- [ ] Partition builder (WIP)
+- [ ] Calendar view (WIP)
+- [ ] Sidebar navigation (WIP)
+
+## Screenshots
+![image](https://github.com/user-attachments/assets/10233193-6763-4ed9-aea5-a926b60d63da)
+![image](https://github.com/user-attachments/assets/4f3e6399-2bd7-4805-b1b3-9342ad6bdfec)
