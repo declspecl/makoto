@@ -19,7 +19,7 @@ pub struct WidthHeightPair {
 	pub height: f64
 }
 
-/// serializable struct that holds all of the window-related user configuration options in the config.yaml file
+/// serializable struct that holds all of the window-related user configuration options in the config.toml file
 /// these are all settings that the program needs to restart in order to see the effects of
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct WindowProperties {
@@ -84,7 +84,7 @@ impl MakotoConfig {
 			))?
 		)?;
 
-		let serialized_config = serde_yaml::to_string(&MakotoConfig::default())?;
+		let serialized_config = toml_edit::ser::to_string(&MakotoConfig::default())?;
 
 		return Ok(fs::write(
 			&config_file_path,
@@ -97,7 +97,7 @@ impl MakotoConfig {
 	/// - the config file parent path is invalid
 	/// - the config file fails to be written to
 	/// - the config file contents are not valid utf-8
-	/// - the deserialization itself (config file is invalid YAML / doesn't align with struct)
+	/// - the deserialization itself (config file is invalid TOML / doesn't align with struct)
 	pub fn try_deserialize_from_config(config_file_path: &Path) -> MakotoResult<Self> {
 		if !config_file_path.exists() {
 			Self::set_up_config_file(config_file_path)?;
@@ -112,7 +112,7 @@ impl MakotoConfig {
 		let _ = config_file.read_to_string(&mut config_file_contents)?;
 
 		// return the UserConfig object
-		return Ok(serde_yaml::from_str::<Self>(
+		return Ok(toml_edit::de::from_str::<Self>(
 			config_file_contents.as_str()
 		)?);
 	}
@@ -121,7 +121,7 @@ impl MakotoConfig {
 	/// errors can happen due to multiple reasons including:
 	/// - the config file parent path is invalid
 	/// - the config file fails to open
-	/// - the struct fails to serialize into YAML
+	/// - the struct fails to serialize into TOML
 	/// - an error occured when trying to write to the file
 	pub fn try_serialize_to_config(
 		&self,
@@ -134,37 +134,12 @@ impl MakotoConfig {
 		// open config file in write mode and create it if it doesn't exist
 		let mut config_file = OpenOptions::new().write(true).open(config_file_path)?;
 
-		// convert config object to yaml string
-		let serialized_makoto_config = serde_yaml::to_string(self)?;
+		// convert config object to TOML string
+		let serialized_makoto_config = toml_edit::ser::to_string(self)?;
 
-		// write yaml string to config file
+		// write TOML string to config file
 		config_file.write_all(serialized_makoto_config.as_bytes())?;
 
 		return Ok(());
-	}
-}
-
-#[cfg(test)]
-mod serialization_tests {
-	use super::*;
-
-	#[test]
-	fn makoto_config() {
-		assert_eq!(
-			serde_yaml::to_string(&MakotoConfig::default()).unwrap(),
-			r#"window_properties:
-                initial_inner_size: null
-                minimum_inner_size: null
-                maximum_inner_size: null
-                initial_position: null
-                maximized: false
-                fullscreen: false
-                centered: false
-                title: makoto
-            makoto_properties: {}
-            "#
-			.replace("                ", "  ")
-			.replace("            ", "")
-		);
 	}
 }

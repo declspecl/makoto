@@ -17,7 +17,7 @@ fn main() -> MakotoResult<()> {
 	// if errors do occur, sets it to `MakotoConfig::default`
 	let config: MakotoConfig = match tauri::api::path::app_config_dir(app_context.config()) {
 		Some(config_parent_dir) => {
-			let config_file_path = config_parent_dir.join("config.yaml");
+			let config_file_path = config_parent_dir.join("config.toml");
 
 			match MakotoConfig::try_deserialize_from_config(&config_file_path) {
 				Ok(config) => config,

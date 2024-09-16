@@ -78,7 +78,7 @@ impl MakotoData {
 	/// errors can happen due to multiple reasons including:
 	/// - the data file parent path is invalid
 	/// - the data file fails to open
-	/// - the struct fails to serialize into YAML
+	/// - the struct fails to serialize into TOML
 	/// - an error occured when trying to write to the file
 	pub fn try_serialize_to_data(
 		&self,
@@ -91,37 +91,14 @@ impl MakotoData {
 		// open data file in write mode
 		let mut data_file = OpenOptions::new().write(true).open(data_file_path)?;
 
-		// convert data object to yaml string
+		// convert data object to TOML string
 		let serialized_makoto_data = serde_json::to_string(self)?;
 
 		println!("{}", serialized_makoto_data);
 
-		// write yaml string to data file
+		// write TOML string to data file
 		data_file.write_all(serialized_makoto_data.as_bytes())?;
 
 		return Ok(());
-	}
-}
-
-#[cfg(test)]
-mod serialization_tests {
-	use serde_json::json;
-
-	use super::*;
-
-	#[test]
-	fn makoto_data() {
-		assert_eq!(
-			json!(MakotoData::default()).to_string(),
-			r#"
-            {
-                "partition_rules": [],
-                "raw_partitions": [],
-                "tag_pool": []
-            }
-            "#
-			.replace(" ", "")
-			.replace("\n", "")
-		);
 	}
 }

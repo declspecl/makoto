@@ -23,7 +23,7 @@ pub fn try_deserialize_state_from_disk(app: AppHandle) -> MakotoResult<MakotoSta
 		.ok_or(MakotoError::FailedToGetPath(
 			"app config dir".into()
 		))?
-		.join("config.yaml");
+		.join("config.toml");
 
 	let config = MakotoConfig::try_deserialize_from_config(&config_file_path)?;
 
@@ -51,7 +51,7 @@ pub fn try_serialize_state_to_disk(
 		.ok_or(MakotoError::FailedToGetPath(
 			"app config dir".into()
 		))?
-		.join("config.yaml");
+		.join("config.toml");
 
 	return Ok(state.config.try_serialize_to_config(&config_file_path)?);
 }
