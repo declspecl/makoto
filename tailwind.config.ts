@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
+export default {
     darkMode: "selector",
     content: [
         "./index.html",
@@ -99,6 +99,4 @@ const config: Config = {
         }
     },
     plugins: [require("tailwindcss-animate")]
-};
-
-export default config;
+} satisfies Config;

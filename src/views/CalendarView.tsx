@@ -1,10 +1,11 @@
-import { getRange } from "@/lib/utils";
+import { getRange } from "@lib/utils";
 import { useMemo, useState } from "react";
-import { CalendarDay } from "@/components/Calendar/CalendarDay";
-import { CalendarInfo, CalendarViewMode } from "@/lib/calendarInfo";
-import { getLeadingDaysForMonth, getNumberOfDaysInMonth, getPreviousMonthIndexAndYear } from "@/lib/helpers/timing";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/Resizable";
-import { CalendarViewControls } from "@/components/Calendar/CalendarViewControls";
+import { Sidebar } from "@components/Sidebar";
+import { CalendarDay } from "@components/Calendar/CalendarDay";
+import { CalendarInfo, CalendarViewMode } from "@lib/calendarInfo";
+import { getLeadingDaysForMonth, getNumberOfDaysInMonth, getPreviousMonthIndexAndYear } from "@lib/helpers/timing";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@components/ui/Resizable";
+import { CalendarViewControls } from "@components/Calendar/CalendarViewControls";
 
 export function CalendarView() {
     const today = new Date();
@@ -25,7 +26,7 @@ export function CalendarView() {
         <div className="w-full h-full">
             <ResizablePanelGroup direction="horizontal" className="w-full h-full gap-2">
                 <ResizablePanel minSize={15} defaultSize={25} className="h-full">
-                    {/* <Sidebar /> */}
+                    <Sidebar />
                 </ResizablePanel>
 
                 <ResizableHandle className="bg-primary" />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ErrorLogContext, SetErrorLogContext } from "@/contexts/ErrorLog";
+import { ErrorLogContext, SetErrorLogContext } from "@context/ErrorLog";
 
 interface ErrorLogProviderProps {
     children?: React.ReactNode

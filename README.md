@@ -16,7 +16,7 @@ This design allows for users to organize their days however they wish without be
 - `cargo tauri dev` to run the local development server and webview app
 
 ## Feature log
-- [x] Configuration through YAML file w/ automatic (de)serialization
+- [x] Configuration through TOML file w/ automatic (de)serialization
 - [x] Toast notification error handling
 - [x] Custom or preset theming
 - [ ] Partition builder (WIP)

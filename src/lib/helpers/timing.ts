@@ -1,6 +1,6 @@
 import { getRange } from "../utils";
 import { getMonthIndexFromMonth } from "./conversions";
-import { PeriodOfTime, PointInTime, Time } from "@/backend/dayTime";
+import { PeriodOfTime, PointInTime, Time } from "@backend/dayTime";
 
 /**
  * Checks whether a given `PointInTime` object is contained inside a given `PeriodOfTime` object

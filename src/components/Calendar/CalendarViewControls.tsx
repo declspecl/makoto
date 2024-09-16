@@ -1,8 +1,8 @@
-import { CalendarInfo } from "@/lib/calendarInfo";
-import { getMonthFromMonthIndex } from "@/lib/helpers/conversions";
-import { Button } from "@/components/ui/Button";
+import { CalendarInfo } from "@lib/calendarInfo";
+import { getMonthFromMonthIndex } from "@lib/helpers/conversions";
+import { Button } from "@components/ui/Button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { getNextMonthIndexAndYear, getPreviousMonthIndexAndYear } from "@/lib/helpers/timing";
+import { getNextMonthIndexAndYear, getPreviousMonthIndexAndYear } from "@lib/helpers/timing";
 
 interface CalendarViewControlsProps extends React.HTMLAttributes<HTMLDivElement> {
     calendarInfo: CalendarInfo,

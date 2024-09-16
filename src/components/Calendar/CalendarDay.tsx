@@ -1,7 +1,7 @@
 import React from "react";
-import { cn } from "@/lib/utils";
-import { useMakotoStateContext } from "@/contexts/MakotoStateContext";
-import { getAllActivePartitionsForDay } from "@/lib/helpers/partition";
+import { cn } from "@lib/utils";
+import { useMakotoStateContext } from "@context/MakotoStateContext";
+import { getAllActivePartitionsForDay } from "@lib/helpers/partition";
 import { PartitionPreview } from "./PartitionPreview";
 
 interface CalendarDayProps extends React.HTMLAttributes<HTMLDivElement> {

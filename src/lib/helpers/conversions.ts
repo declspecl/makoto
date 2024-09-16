@@ -1,4 +1,4 @@
-import { DayOfWeek, Month } from "@/backend/dayTime";
+import { DayOfWeek, Month } from "@backend/dayTime";
 
 /**
  * Converts a `Month` into the index of the numerical representation of the `Month` in the gregorian calendar, 0-11

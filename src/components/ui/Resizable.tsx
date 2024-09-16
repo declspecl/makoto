@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@lib/utils";
 import * as ResizablePrimitive from "react-resizable-panels";
 
 export const ResizablePanelGroup = ({ className, ...props}: React.ComponentProps<typeof ResizablePrimitive.PanelGroup>) => (

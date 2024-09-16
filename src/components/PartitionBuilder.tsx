@@ -5,12 +5,12 @@ import { Calendar } from "./ui/Calendar";
 import { DateRange } from "react-day-picker";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
-import { getTimeFromString } from "@/lib/helpers/timing";
-import { RawPartition } from "@/backend/partition";
-import { PeriodOfTime, PointInTime } from "@/backend/dayTime";
-import { getMonthFromMonthIndex } from "@/lib/helpers/conversions";
-import { useMakotoStateDispatchContext } from "@/contexts/MakotoStateContext";
-import { useSetErrorLogContext } from "@/contexts/ErrorLog";
+import { getTimeFromString } from "@lib/helpers/timing";
+import { RawPartition } from "@backend/partition";
+import { PeriodOfTime, PointInTime } from "@backend/dayTime";
+import { getMonthFromMonthIndex } from "@lib/helpers/conversions";
+import { useMakotoStateDispatchContext } from "@context/MakotoStateContext";
+import { useSetErrorLogContext } from "@context/ErrorLog";
 
 export function PartitionBuilder() {
     const setErrorLog = useSetErrorLogContext();

@@ -1,4 +1,4 @@
 export interface MakotoError {
-    tag: "IOError" | "FailedToGetPath" | "SerdeYAMLError"
+    tag: "IOError" | "FailedToGetPath" | "TOMLEditSerError" | "TOMLEditDeError"
     message: string
 }

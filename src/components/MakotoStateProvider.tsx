@@ -1,10 +1,10 @@
 import { Button } from "./ui/Button";
-import { MakotoError } from "@/backend/error";
+import { MakotoError } from "@backend/error";
 import { appWindow } from "@tauri-apps/api/window";
 import { UnlistenFn } from "@tauri-apps/api/event";
 import { useEffect, useReducer, useRef, useState } from "react";
-import { try_deserialize_state_from_disk, try_serialize_state_to_disk } from "@/backend/commands";
-import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@/contexts/MakotoStateContext";
+import { try_deserialize_state_from_disk, try_serialize_state_to_disk } from "@backend/commands";
+import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@context/MakotoStateContext";
 
 interface MakotoStateLoaderProps {
     children: React.ReactNode
