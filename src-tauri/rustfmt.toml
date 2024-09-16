@@ -1,0 +1,8 @@
+trailing_comma = "Never"
+match_block_trailing_comma = true
+brace_style = "SameLineWhere"
+hard_tabs = true
+tab_spaces = 4
+max_width = 120
+fn_params_layout = "Vertical"
+fn_call_width = 40
