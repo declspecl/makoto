@@ -1,7 +1,3 @@
-// -------------------------
-// - date based structures -
-// -------------------------
-
 export type DayOfWeek = "Sunday"
                       | "Monday"
                       | "Tuesday"
@@ -34,13 +30,7 @@ export interface DaysOfMonth {
 }
 
 export type Year = number;
-
-// -------------------------
-// - time based structures -
-// -------------------------
-
 export type Minute = number;
-
 export type Hour = number;
 
 export interface Time {

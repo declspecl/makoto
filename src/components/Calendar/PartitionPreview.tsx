@@ -1,4 +1,4 @@
-import { PartitionRule, RawPartition } from "@backend/partition";
+import { PartitionRule, RawPartition } from "@backend/model/partition";
 
 interface PartitionPreview extends React.HTMLAttributes<HTMLDivElement> {
     partition: RawPartition | PartitionRule

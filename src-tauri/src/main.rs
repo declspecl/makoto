@@ -18,7 +18,7 @@ fn main() -> MakotoResult<()> {
 		Some(config_parent_dir) => {
 			let config_file_path = config_parent_dir.join("config.toml");
 
-			match MakotoConfig::try_deserialize_from_config(&config_file_path) {
+			match MakotoConfig::try_deserialize_from_config(&config_file_path, false) {
 				Ok(config) => config,
 				Err(_) => MakotoConfig::default()
 			}

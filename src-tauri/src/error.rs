@@ -12,7 +12,7 @@ where
 }
 
 #[derive(thiserror::Error, Debug, Serialize)]
-#[serde(tag = "type", content = "error")]
+#[serde(tag = "type", content = "message")]
 pub enum MakotoError {
 	#[error("IOError of type \"{}\": \"{0}\"", .0.kind())]
 	#[serde(serialize_with = "serialize_error")]

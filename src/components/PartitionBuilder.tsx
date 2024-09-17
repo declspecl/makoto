@@ -5,12 +5,12 @@ import { Calendar } from "./ui/Calendar";
 import { DateRange } from "react-day-picker";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
-import { getTimeFromString } from "@lib/helpers/timing";
-import { RawPartition } from "@backend/partition";
-import { PeriodOfTime, PointInTime } from "@backend/dayTime";
-import { getMonthFromMonthIndex } from "@lib/helpers/conversions";
+import { RawPartition } from "@backend/model/partition";
+import { PeriodOfTime, PointInTime } from "@/backend/model/dayTime";
 import { useMakotoStateDispatchContext } from "@context/MakotoStateContext";
 import { useSetErrorLogContext } from "@context/ErrorLog";
+import { convertMonthNumberToMonth } from "@/lib/conversions";
+import { parseTimeFromString } from "@/lib/parse";
 
 export function PartitionBuilder() {
     const setErrorLog = useSetErrorLogContext();
@@ -53,16 +53,16 @@ export function PartitionBuilder() {
 
                             const startPIT: PointInTime = {
                                 year: rawPartitionDateRange.from.getFullYear(),
-                                month: getMonthFromMonthIndex(rawPartitionDateRange.from.getMonth()),
+                                month: convertMonthNumberToMonth(rawPartitionDateRange.from.getMonth() + 1),
                                 day_of_month: rawPartitionDateRange.from.getDate(),
-                                time: getTimeFromString(rawPartitionStartTime)
+                                time: parseTimeFromString(rawPartitionStartTime)
                             };
 
                             const endPIT: PointInTime = {
                                 year: rawPartitionDateRange.to.getFullYear(),
-                                month: getMonthFromMonthIndex(rawPartitionDateRange.to.getMonth()),
+                                month: convertMonthNumberToMonth(rawPartitionDateRange.to.getMonth() + 1),
                                 day_of_month: rawPartitionDateRange.to.getDate(),
-                                time: getTimeFromString(rawPartitionEndTime)
+                                time: parseTimeFromString(rawPartitionEndTime)
                             };
 
                             const periodOfTime: PeriodOfTime = {

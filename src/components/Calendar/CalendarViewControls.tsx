@@ -1,8 +1,8 @@
-import { CalendarInfo } from "@lib/calendarInfo";
-import { getMonthFromMonthIndex } from "@lib/helpers/conversions";
 import { Button } from "@components/ui/Button";
+import { CalendarInfo } from "@/model/calendarInfo";
+import { convertMonthNumberToMonth } from "@/lib/conversions";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { getNextMonthIndexAndYear, getPreviousMonthIndexAndYear } from "@lib/helpers/timing";
+import { getNextMonthNumberAndYear, getPreviousMonthNumberAndYear } from "@/lib/helpers/timing";
 
 interface CalendarViewControlsProps extends React.HTMLAttributes<HTMLDivElement> {
     calendarInfo: CalendarInfo,
@@ -17,24 +17,24 @@ export function CalendarViewControls({ calendarInfo, setCalendarInfo }: Calendar
                 size="icon"
                 className="w-8 h-8"
                 onClick={() => {
-                    const [newMonthIndex, newYear] = getPreviousMonthIndexAndYear(calendarInfo.targetMonthIndex, calendarInfo.targetYear);
+                    const [newMonthNumber, newYear] = getPreviousMonthNumberAndYear(calendarInfo.targetMonthNumber, calendarInfo.targetYear);
 
-                    setCalendarInfo({ ...calendarInfo, targetYear: newYear, targetMonthIndex: newMonthIndex })
+                    setCalendarInfo({ ...calendarInfo, targetYear: newYear, targetMonthNumber: newMonthNumber })
                 }}
             >
                 <ChevronLeftIcon />
             </Button>
 
-            <h2>{`${getMonthFromMonthIndex(calendarInfo.targetMonthIndex)} ${calendarInfo.targetYear}`}</h2>
+            <h2>{`${convertMonthNumberToMonth(calendarInfo.targetMonthNumber)} ${calendarInfo.targetYear}`}</h2>
 
             <Button
                 variant="outline"
                 size="icon"
                 className="w-8 h-8"
                 onClick={() => {
-                    const [newMonthIndex, newYear] = getNextMonthIndexAndYear(calendarInfo.targetMonthIndex, calendarInfo.targetYear);
+                    const [newMonthNumber, newYear] = getNextMonthNumberAndYear(calendarInfo.targetMonthNumber, calendarInfo.targetYear);
 
-                    setCalendarInfo({ ...calendarInfo, targetYear: newYear, targetMonthIndex: newMonthIndex })
+                    setCalendarInfo({ ...calendarInfo, targetYear: newYear, targetMonthNumber: newMonthNumber })
                 }}
             >
                 <ChevronRightIcon />

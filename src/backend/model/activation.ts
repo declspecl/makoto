@@ -3,11 +3,11 @@ import { DaysOfMonth, DaysOfWeek } from "./dayTime";
 export type ActivationOperator = "AND" | "OR";
 
 interface OnDaysOfWeekActivationQuery extends DaysOfWeek {
-    tag: "OnDaysOfWeek"
+    type: "OnDaysOfWeek"
 }
 
 interface OnDaysOfMonthActivationQuery extends DaysOfMonth {
-    tag: "OnDaysOfMonth"
+    type: "OnDaysOfMonth"
 }
 
 export type ActivationQuery = | OnDaysOfWeekActivationQuery

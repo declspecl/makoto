@@ -13,7 +13,7 @@ export const ResizablePanelGroup = ({ className, ...props}: React.ComponentProps
 
 export const ResizablePanel = ResizablePrimitive.Panel;
 
-export const ResizableHandle = ({ withHandle, className, ...props}: React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle>) => (
+export const ResizableHandle = ({ className, ...props}: React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle>) => (
     <ResizablePrimitive.PanelResizeHandle
         className={cn(
             "relative flex w-px items-center justify-center bg-border",

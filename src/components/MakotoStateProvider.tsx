@@ -1,9 +1,9 @@
 import { Button } from "./ui/Button";
-import { MakotoError } from "@backend/error";
+import { MakotoError } from "@/backend/api/error";
 import { appWindow } from "@tauri-apps/api/window";
 import { UnlistenFn } from "@tauri-apps/api/event";
 import { useEffect, useReducer, useRef, useState } from "react";
-import { try_deserialize_state_from_disk, try_serialize_state_to_disk } from "@backend/commands";
+import { try_deserialize_state_from_disk, try_serialize_state_to_disk } from "@backend/api/commands";
 import { MakotoStateContext, MakotoStateDispatchContext, makotoStateReducer } from "@context/MakotoStateContext";
 
 interface MakotoStateLoaderProps {
@@ -18,12 +18,17 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
     useEffect(() => {
         let isCancelled = false;
 
-        try_deserialize_state_from_disk()
+        try_deserialize_state_from_disk(true)
             .then((state) => {
+                console.log(state);
+
                 if (!isCancelled)
                     dispatch({ type: "override", state });
             })
-            .catch((err) => setStartupError(err as MakotoError));
+            .catch((err) => {
+                console.error(err);
+                setStartupError(err as MakotoError);
+            });
 
         return () => {
             isCancelled = true;
@@ -75,7 +80,7 @@ export function MakotoStateProvider({ children }: MakotoStateLoaderProps) {
                 <>
                     {startupError ? (
                         <div className="w-full h-full flex flex-column justify-center items-center">
-                            <p>{`${startupError.tag} : ${startupError.message}`}</p>
+                            <p>{`${startupError.type} : ${startupError.message}`}</p>
 
                             <Button onClick={() => console.log("TODO")}>
                                 Set to default

@@ -1,25 +1,25 @@
-import { getRange } from "@lib/utils";
+import { generateRange } from "@lib/utils";
 import { useMemo, useState } from "react";
 import { Sidebar } from "@components/Sidebar";
 import { CalendarDay } from "@components/Calendar/CalendarDay";
-import { CalendarInfo, CalendarViewMode } from "@lib/calendarInfo";
-import { getLeadingDaysForMonth, getNumberOfDaysInMonth, getPreviousMonthIndexAndYear } from "@lib/helpers/timing";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@components/ui/Resizable";
 import { CalendarViewControls } from "@components/Calendar/CalendarViewControls";
+import { CalendarInfo, CalendarViewMode } from "@/model/calendarInfo";
+import { getNumberOfDaysInMonth, getPreviousMonthDayNumbersInWeekOfNewMonthStart, getPreviousMonthNumberAndYear } from "@/lib/helpers/timing";
 
 export function CalendarView() {
     const today = new Date();
 
     const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
         targetYear: today.getFullYear(),
-        targetMonthIndex: today.getMonth(),
+        targetMonthNumber: today.getMonth() + 1,
         viewMode: CalendarViewMode.Monthly,
     });
 
     const daysOfMonth: number[] = useMemo(() => {
-        let leadingDays = getLeadingDaysForMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex);
+        let leadingDays = getPreviousMonthDayNumbersInWeekOfNewMonthStart(calendarInfo.targetYear, calendarInfo.targetMonthNumber);
 
-        return leadingDays.concat(...getRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonthIndex)));
+        return leadingDays.concat(...generateRange(1, getNumberOfDaysInMonth(calendarInfo.targetYear, calendarInfo.targetMonthNumber)));
     }, [calendarInfo]);
 
     return (
@@ -43,10 +43,10 @@ export function CalendarView() {
                                 <CalendarDay
                                     key={`dayOfMonth-${dayOfMonth}@${i}`}
                                     year={calendarInfo.targetYear}
-                                    monthIndex={(dayOfMonth > 6 && i < 6) ? getPreviousMonthIndexAndYear(calendarInfo.targetMonthIndex, 0)[0] : calendarInfo.targetMonthIndex}
+                                    monthNumber={(dayOfMonth > 7 && i < 7) ? getPreviousMonthNumberAndYear(calendarInfo.targetMonthNumber, 0)[0] : calendarInfo.targetMonthNumber}
                                     dayOfMonth={dayOfMonth}
                                     today={today}
-                                    isPreceding={dayOfMonth > 6 && i < 6}
+                                    isPreceding={dayOfMonth > 7 && i < 7}
                                 />
                             ))}
                         </div>

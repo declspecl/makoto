@@ -14,7 +14,7 @@ export function cn(...inputs: ClassValue[]) {
  * @param {number} end The number to end the range on (inclusive)
  * @returns {number[]} The range of numbers spanning from `start` to `end`
  */
-export function getRange(start: number, end: number): number[] {
+export function generateRange(start: number, end: number): number[] {
     if (end < start) return [];
     else return Array.from((new Array(1 + (end - start))).keys()).map(v => start + v);
 }
