@@ -1,13 +1,11 @@
 pub mod config;
 pub mod data;
-pub mod tag;
 
 use config::{MakotoConfig, MakotoProperties, WindowProperties};
 use data::MakotoData;
 
 use serde::{Deserialize, Serialize};
 
-/// serializable struct that represents the user configuration and the user data
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MakotoState {
 	pub config: MakotoConfig,

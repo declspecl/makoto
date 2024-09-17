@@ -9,13 +9,12 @@ pub mod model;
 pub mod state;
 
 use commands::{try_deserialize_state_from_disk, try_serialize_state_to_disk};
+use tauri::api::path::app_config_dir;
 
 fn main() -> MakotoResult<()> {
 	let app_context = tauri::generate_context!();
 
-	// if no errors occur, deserializes `MakotoConfig` from config.json.
-	// if errors do occur, sets it to `MakotoConfig::default`
-	let config: MakotoConfig = match tauri::api::path::app_config_dir(app_context.config()) {
+	let config: MakotoConfig = match app_config_dir(app_context.config()) {
 		Some(config_parent_dir) => {
 			let config_file_path = config_parent_dir.join("config.toml");
 
@@ -27,14 +26,12 @@ fn main() -> MakotoResult<()> {
 		None => MakotoConfig::default()
 	};
 
-	// quick alias for QoL
 	let window_properties = config.window_properties;
 
 	tauri::Builder::default()
 		.setup(
 			move |app| -> Result<(), Box<dyn std::error::Error>> {
-				// defining main window
-				let mut main_window = tauri::WindowBuilder::new(
+				let mut window_builder = tauri::WindowBuilder::new(
 					app,
 					"MainWindow",
 					tauri::WindowUrl::App("/index.html".into())
@@ -44,31 +41,29 @@ fn main() -> MakotoResult<()> {
 				.maximized(window_properties.maximized)
 				.fullscreen(window_properties.fullscreen);
 
-				// centering window
 				if window_properties.centered {
-					main_window = main_window.center();
-				}
-				// if user does not want it to start centered, check if they specified a position
-				else if let Some(position) = window_properties.initial_position {
-					main_window = main_window.position(position.x, position.y);
+					window_builder = window_builder.center();
+				} else if let Some(position) = window_properties.initial_position {
+					window_builder = window_builder.position(position.x, position.y);
 				}
 
-				// min size
 				if let Some(size) = window_properties.initial_inner_size {
-					main_window = main_window.inner_size(size.width, size.height);
+					window_builder = window_builder.inner_size(size.width, size.height);
 				}
 
-				// initial size
 				if let Some(size) = window_properties.minimum_inner_size {
-					main_window = main_window.min_inner_size(size.width, size.height);
+					window_builder = window_builder.min_inner_size(size.width, size.height);
 				}
 
-				// max size
 				if let Some(size) = window_properties.maximum_inner_size {
-					main_window = main_window.max_inner_size(size.width, size.height);
+					window_builder = window_builder.max_inner_size(size.width, size.height);
 				}
 
-				main_window.build()?;
+				let main_window = window_builder.build()?;
+				println!(
+					"Successfully created main window {}",
+					main_window.label()
+				);
 
 				return Ok(());
 			}
@@ -78,7 +73,7 @@ fn main() -> MakotoResult<()> {
 			try_deserialize_state_from_disk
 		])
 		.run(app_context)
-		.expect("error while running tauri application");
+		.expect("Failed to start Makoto. Please try again later");
 
 	return Ok(());
 }
