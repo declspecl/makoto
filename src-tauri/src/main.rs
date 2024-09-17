@@ -1,17 +1,23 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::fs;
+
 use error::MakotoResult;
 use log::info;
-use state::config::MakotoConfig;
+use state::config::{MakotoConfig, WindowProperties};
 
 pub mod commands;
+pub mod constants;
 pub mod error;
 pub mod logging;
 pub mod model;
 pub mod state;
 
 use commands::{try_deserialize_state_from_disk, try_serialize_state_to_disk};
-use tauri::api::path::{app_config_dir, app_data_dir};
+use tauri::{
+	api::path::{app_config_dir, app_data_dir},
+	Builder, WindowBuilder, Wry
+};
 
 fn main() -> MakotoResult<()> {
 	let app_context = tauri::generate_context!();
@@ -20,13 +26,16 @@ fn main() -> MakotoResult<()> {
 	let app_config_dir = app_config_dir(app_context.config()).expect("Fatal error: failed to get app data directory from app context");
 
 	if !app_data_dir.exists() {
-		std::fs::create_dir_all(app_data_dir.to_owned())?;
+		fs::create_dir_all(app_data_dir.to_owned())?;
+	}
+	if !app_config_dir.exists() {
+		fs::create_dir_all(app_data_dir.to_owned())?;
 	}
 
 	logging::init_log4rs(&app_data_dir);
 
 	let config: MakotoConfig = {
-		let config_file_path = app_config_dir.join("config.toml");
+		let config_file_path = app_config_dir.join(constants::CONFIG_FILE_NAME);
 
 		match MakotoConfig::try_deserialize_from_config(&config_file_path, false) {
 			Ok(config) => config,
@@ -34,12 +43,18 @@ fn main() -> MakotoResult<()> {
 		}
 	};
 
-	let window_properties = config.window_properties;
+	build_tauri_app(config.window_properties)
+		.run(app_context)
+		.expect("Failed to start Makoto. Please try again later");
 
-	tauri::Builder::default()
+	return Ok(());
+}
+
+fn build_tauri_app(window_properties: WindowProperties) -> Builder<Wry> {
+	return tauri::Builder::default()
 		.setup(
 			move |app| -> Result<(), Box<dyn std::error::Error>> {
-				let mut window_builder = tauri::WindowBuilder::new(
+				let mut window_builder = WindowBuilder::new(
 					app,
 					"MainWindow",
 					tauri::WindowUrl::App("/index.html".into())
@@ -80,9 +95,5 @@ fn main() -> MakotoResult<()> {
 		.invoke_handler(tauri::generate_handler![
 			try_serialize_state_to_disk,
 			try_deserialize_state_from_disk
-		])
-		.run(app_context)
-		.expect("Failed to start Makoto. Please try again later");
-
-	return Ok(());
+		]);
 }
