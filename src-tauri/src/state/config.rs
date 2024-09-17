@@ -74,9 +74,11 @@ impl MakotoConfig {
 		config_file_path: &Path
 	) -> MakotoResult<()> {
 		if !config_file_path.exists() {
-			fs::create_dir_all(config_file_path.parent().ok_or(
-				MakotoError::FailedToGetPath("config file parent".into())
-			)?)?;
+			fs::create_dir_all(
+				config_file_path.parent().ok_or(MakotoError::FailedToGetPath(
+					"config file parent".into()
+				))?
+			)?;
 		}
 
 		let mut config_file = OpenOptions::new().create(true).write(true).open(config_file_path)?;
@@ -87,12 +89,14 @@ impl MakotoConfig {
 		return Ok(());
 	}
 
-	pub fn try_deserialize_from_config(config_file_path: &Path, create_if_does_not_exist: bool) -> MakotoResult<Self> {
+	pub fn try_deserialize_from_config(
+		config_file_path: &Path,
+		create_if_does_not_exist: bool
+	) -> MakotoResult<Self> {
 		if !config_file_path.exists() {
 			if create_if_does_not_exist {
 				MakotoConfig::default().try_serialize_to_config(config_file_path)?;
-			}
-			else {
+			} else {
 				return Err(MakotoError::FileDoesNotExist(
 					config_file_path.to_string_lossy().into()
 				));

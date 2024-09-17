@@ -6,7 +6,10 @@ use crate::{
 };
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn try_deserialize_state_from_disk(app: AppHandle, create_if_does_not_exist: bool) -> MakotoResult<MakotoState> {
+pub fn try_deserialize_state_from_disk(
+	app: AppHandle,
+	create_if_does_not_exist: bool
+) -> MakotoResult<MakotoState> {
 	let data_file_path = app
 		.path_resolver()
 		.app_data_dir()
@@ -15,7 +18,10 @@ pub fn try_deserialize_state_from_disk(app: AppHandle, create_if_does_not_exist:
 		))?
 		.join("data.json");
 
-	let data = MakotoData::try_deserialize_from_data(&data_file_path, create_if_does_not_exist)?;
+	let data = MakotoData::try_deserialize_from_data(
+		&data_file_path,
+		create_if_does_not_exist
+	)?;
 
 	let config_file_path = app
 		.path_resolver()
@@ -25,7 +31,10 @@ pub fn try_deserialize_state_from_disk(app: AppHandle, create_if_does_not_exist:
 		))?
 		.join("config.toml");
 
-	let config = MakotoConfig::try_deserialize_from_config(&config_file_path, create_if_does_not_exist)?;
+	let config = MakotoConfig::try_deserialize_from_config(
+		&config_file_path,
+		create_if_does_not_exist
+	)?;
 
 	return Ok(MakotoState { config, data });
 }
