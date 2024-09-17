@@ -2,16 +2,11 @@
 
 use error::MakotoResult;
 use log::info;
-use log4rs::{
-	append::{console::ConsoleAppender, file::FileAppender},
-	config::{Appender, Root},
-	encode::pattern::PatternEncoder,
-	Config
-};
 use state::config::MakotoConfig;
 
 pub mod commands;
 pub mod error;
+pub mod logging;
 pub mod model;
 pub mod state;
 
@@ -28,23 +23,7 @@ fn main() -> MakotoResult<()> {
 		std::fs::create_dir_all(app_data_dir.to_owned())?;
 	}
 
-	let stdout_appender = ConsoleAppender::builder().build();
-
-	let file_appender = FileAppender::builder()
-		.encoder(Box::new(PatternEncoder::new(
-			"{d} - {m}{n}"
-		)))
-		.build(app_data_dir.join("makoto.log").to_owned())?;
-
-	let logging_config = Config::builder()
-		.appenders(vec![
-			Appender::builder().build("stdout", Box::new(stdout_appender)),
-			Appender::builder().build("logfile", Box::new(file_appender)),
-		])
-		.build(Root::builder().appenders(vec!["stdout", "logfile"]).build(log::LevelFilter::Info))
-		.expect("Fatal error: failed to build log4rs configuration");
-
-	log4rs::init_config(logging_config).expect("Fatal error: failed to initialize log4rs");
+	logging::init_log4rs(&app_data_dir);
 
 	let config: MakotoConfig = {
 		let config_file_path = app_config_dir.join("config.toml");
