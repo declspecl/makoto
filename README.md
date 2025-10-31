@@ -1,7 +1,5 @@
 # makoto
 
-> Back under active development :D
-
 makoto is an attempt to create a stupid simple personal calendar and planning solution.
 It takes a unique approach on the typical "events" by instead operating on a fundamental unit of "partitions."
 Partitions are simply chunks of time in a day.
